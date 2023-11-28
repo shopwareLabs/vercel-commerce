@@ -7,7 +7,7 @@ export class AbstractPage {
     this.page = page;
   }
 
-  async wait(time) {
+  async wait(time: number) {
     await this.page.waitForTimeout(time);
   }
 }
