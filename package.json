@@ -30,6 +30,7 @@
     "sharp": "^0.32.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "20.8.9",
