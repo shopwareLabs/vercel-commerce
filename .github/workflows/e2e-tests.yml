@@ -6,7 +6,7 @@ on:
 jobs:
   run-e2e:
     name: Playwright testing deployment ${{ github.event.deployment_status.target_url }}
-    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && !contains(github.event.deployment_status.target_url, 'frontends-docs')
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -24,7 +24,9 @@ jobs:
           node-version: 18
           cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
-      - name: install
+      - name: Change to e2e-tests folder
+        run: cd e2e-tests
+      - name: Install
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Install dependencies with Playwright
