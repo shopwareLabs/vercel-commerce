@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:e2e": "playwright test e2e"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.39.0",
-    "@types/node": "^20.8.10"
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.10.3"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
