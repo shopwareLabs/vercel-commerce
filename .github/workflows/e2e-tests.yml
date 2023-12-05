@@ -15,27 +15,24 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       - run: corepack enable
       - run: pnpm --version
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
           cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
-
-      - name: Install react project dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Install e2e-tests dependencies
         run: cd e2e-tests && pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Install dependencies with Playwright
+      - name: Install e2e-tests dependencies with Playwright
         run: |
           cd e2e-tests && pnpm playwright install --with-deps
 
-      - name: Run tests
+      - name: Run e2e-tests
         run: cd e2e-tests && pnpm run test:e2e
         env:
           BASE_E2E_URL: ${{ github.event.deployment_status.target_url }}
