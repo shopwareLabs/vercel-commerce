@@ -1,4 +1,4 @@
-# Next.js Commerce with Shopware
+# Next.js Shopware Starter
 
 A Next.js 14 and App Router-ready ecommerce template featuring:
 
@@ -20,7 +20,7 @@ To get started, use this README and the example environment variable comments.
 
 ## Running locally
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js Commerce. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+You will need to use the environment variables [defined in `.env.example`](https://github.com/shopwareLabs/nextjs-shopware-starter/blob/main/.env.example) to run Next.js Commerce. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for this, but a `.env` file is all that is necessary.
 
 > Note: You should not commit your `.env` file or it will expose secrets that will allow others to control your Shopware store.
 
@@ -71,5 +71,5 @@ The template is provided as-is without an integrated checkout. For projects ther
 Any questions, issues or feature requests? Feel free to join the community.
 
 <p align="left">
-<a href="https://shopwarecommunity.slack.com/archives/C050L6NCMGQ" target="_blank"><img src="./public/slack.svg" alt="Join our Slack Channel" width="20" height="16"/>Channel</a> | <a href="https://github.com/shopware/frontends/discussions">💬 Discuss</a> | <a href="https://frontends.shopware.com/" target="_blank">📚 Docu</a> | <a href="https://shopware-vercel-commerce-react.vercel.app/" target="_blank">🚀 Demo</a>
+<a href="https://shopwarecommunity.slack.com/archives/C050L6NCMGQ" target="_blank"><img src="https://raw.githubusercontent.com/shopwareLabs/nextjs-shopware-starter/main/public/slack.svg" alt="Join our Slack Channel" width="20" height="16"/>Channel</a> | <a href="https://github.com/shopware/frontends/discussions">💬 Discuss</a> | <a href="https://frontends.shopware.com/" target="_blank">📚 Docu</a> | <a href="https://shopware-vercel-commerce-react.vercel.app/" target="_blank">🚀 Demo</a>
 </p>
