@@ -14,13 +14,13 @@ A Next.js 14 and App Router-ready ecommerce template featuring:
 
 ## Prerequisites
 
-Next.js Commerce with Shopware requires a running [Shopware 6 Instance (Installation Guide)](https://developer.shopware.com/docs/guides/installation).
+Next.js Shopware Starter requires a running [Shopware 6 Instance (Installation Guide)](https://developer.shopware.com/docs/guides/installation).
 
 To get started, use this README and the example environment variable comments.
 
 ## Running locally
 
-You will need to use the environment variables [defined in `.env.example`](https://github.com/shopwareLabs/nextjs-shopware-starter/blob/main/.env.example) to run Next.js Commerce. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+You will need to use the environment variables [defined in `.env.example`](https://github.com/shopwareLabs/nextjs-shopware-starter/blob/main/.env.example) to run Next.js Shopware Starter. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for this, but a `.env` file is all that is necessary.
 
 > Note: You should not commit your `.env` file or it will expose secrets that will allow others to control your Shopware store.
 
@@ -35,7 +35,7 @@ pnpm dev
 
 Your app should now be running on [localhost:3000](http://localhost:3000/).
 
-## How to configure your Shopware store for Next.js Commerce
+## How to configure your Shopware store for Next.js Shopware Starter
 
 You can find the `SHOPWARE_ACCESS_TOKEN` in the Admin at your SalesChannel configuration.
 
@@ -49,7 +49,7 @@ Create a `SHOPWARE_STORE_DOMAIN` environment variable and use your Shopware doma
 
 ### Accessing the Shopware store API
 
-Next.js Commerce utilizes [Shopware's store API](https://shopware.stoplight.io/docs/store-api/) to create unique customer experiences. The API offers a full range of commerce options making it possible for customers to control products, collections, menus, pages, cart, checkout, and more.
+Next.js Shopware Starter utilizes [Shopware's store API](https://shopware.stoplight.io/docs/store-api/) to create unique customer experiences. The API offers a full range of commerce options making it possible for customers to control products, collections, menus, pages, cart, checkout, and more.
 
 In order to use the Shopware's store API, you need at least one _(Storefront)_ SalesChannel _(for speaking URL's)_ in your Shopware instance.
 
