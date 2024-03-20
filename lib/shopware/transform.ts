@@ -176,7 +176,7 @@ export function transformCollectionToList(collection: Collection[]): ListItem[] 
     collection.map((item) => {
       // we asume that when there is not product child count it must be a cms page
       const pagePrefix = item.childCount === 0 ? '/cms' : '/search';
-      const newHandle = item.handle.replace('Main-navigation/', '');
+      const newHandle = item.handle.replace('Welcome-to-Shopware-Frontends/', '');
       listItem.push({
         title: item.title,
         path: `${pagePrefix}/${newHandle}`
