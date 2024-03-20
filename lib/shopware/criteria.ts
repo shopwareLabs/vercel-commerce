@@ -3,13 +3,7 @@ export function getDefaultProductsCriteria(page: number = 1, limit: number = 15)
     p: page,
     limit: limit,
     associations: getDefaultProductAssociations(),
-    filter: [
-      {
-        type: 'equals',
-        field: 'parentId',
-        value: null
-      }
-    ]
+    filter: []
   };
 }
 

@@ -37,8 +37,8 @@ function transformMenuItem(item: ExtendedCategory, type: string): Menu {
         : '/search/' + item.seoUrls[0].seoPathInfo
       : ''
     : type === 'footer-navigation'
-    ? '/cms/' + item.id ?? ''
-    : '/search/' + item.id ?? '';
+      ? '/cms/' + item.id ?? ''
+      : '/search/' + item.id ?? '';
 
   // @ToDo: currently only footer-navigation is used for cms pages, this need to be more dynamic (shoud depending on the item)
   return {
@@ -176,7 +176,7 @@ export function transformCollectionToList(collection: Collection[]): ListItem[] 
     collection.map((item) => {
       // we asume that when there is not product child count it must be a cms page
       const pagePrefix = item.childCount === 0 ? '/cms' : '/search';
-      const newHandle = item.handle.replace('Main-navigation/', '');
+      const newHandle = item.handle.replace('Welcome-to-Shopware-Frontends/', '');
       listItem.push({
         title: item.title,
         path: `${pagePrefix}/${newHandle}`
