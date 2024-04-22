@@ -186,7 +186,7 @@ async function updateLineItem(lineId: string, variantId: string, quantity: numbe
           id: lineId,
           referencedId: variantId,
           quantity: quantity
-        }
+        } as unknown as ExtendedLineItem
       ]
     });
   } catch (error) {

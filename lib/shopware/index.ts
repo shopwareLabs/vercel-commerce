@@ -289,7 +289,7 @@ export async function getProduct(handle: string | []): Promise<Product | undefin
 }
 
 export async function getProductRecommendations(productId: string): Promise<Product[]> {
-  const products: ExtendedProductListingResult = {};
+  const products = {} as unknown as ExtendedProductListingResult;
 
   const res = await requestCrossSell(productId, getDefaultCrossSellingCriteria());
   // @ToDo: Make this more dynamic to merge multiple Cross-Sellings, at the moment we only get the first one
