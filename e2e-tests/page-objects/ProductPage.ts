@@ -33,7 +33,7 @@ export class ProductPage {
       await expect(this.colourLocator).toHaveClass(/ring-2/);
     }).toPass({
       // Probe, wait 1s, probe, wait 2s, probe, wait 10s, probe, wait 10s, probe, .... Defaults to [100, 250, 500, 1000].
-      intervals: [1_000, 2_000, 10_000],
+      intervals: [2_000, 5_000, 15_000],
       timeout: 60_000
     });
   }
