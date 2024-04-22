@@ -59,6 +59,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
 
     const errorMessage = alertErrorMessages(response);
     if (errorMessage !== '') {
+      revalidateTag(TAGS.cart);
       return errorMessage;
     }
     revalidateTag(TAGS.cart);

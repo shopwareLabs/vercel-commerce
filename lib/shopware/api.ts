@@ -44,7 +44,8 @@ export async function requestNavigation(
       {
         activeId: type,
         rootId: type,
-        depth: depth
+        depth: depth,
+        'sw-include-seo-urls': true
       }
     );
   } catch (error) {

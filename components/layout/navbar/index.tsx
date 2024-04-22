@@ -6,7 +6,7 @@ import { Menu } from 'lib/shopware/types';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import MobileMenu from './mobile-menu';
-import Search from './search';
+import Search, { SearchSkeleton } from './search';
 
 export default async function Navbar() {
   const menu = await getMenu({ type: 'main-navigation' });
@@ -14,7 +14,9 @@ export default async function Navbar() {
   return (
     <nav className="relative flex items-center justify-between p-4 lg:px-6">
       <div className="block flex-none md:hidden">
-        <MobileMenu menu={menu} />
+        <Suspense fallback={null}>
+          <MobileMenu menu={menu} />
+        </Suspense>
       </div>
       <div className="flex w-full items-center">
         <div className="flex w-full md:w-4/6">
@@ -37,7 +39,9 @@ export default async function Navbar() {
           ) : null}
         </div>
         <div className="hidden justify-center md:flex md:w-1/6">
-          <Search />
+          <Suspense fallback={<SearchSkeleton />}>
+            <Search />
+          </Suspense>
         </div>
         <div className="flex justify-end md:w-1/6">
           <Suspense fallback={<OpenCart />}>

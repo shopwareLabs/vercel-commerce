@@ -2,6 +2,7 @@ import { AddToCart } from 'components/cart/add-to-cart';
 import Price from 'components/price';
 import Prose from 'components/prose';
 import { Product } from 'lib/shopware/types';
+import { Suspense } from 'react';
 import { VariantSelector } from './variant-selector';
 
 export function ProductDescription({ product }: { product: Product }) {
@@ -16,13 +17,17 @@ export function ProductDescription({ product }: { product: Product }) {
           />
         </div>
       </div>
-      <VariantSelector options={product.options} variants={product.variants} />
+      <Suspense fallback={null}>
+        <VariantSelector options={product.options} variants={product.variants} />
+      </Suspense>
 
-      <AddToCart
-        product={product}
-        variants={product.variants}
-        availableForSale={product.availableForSale}
-      />
+      <Suspense fallback={null}>
+        <AddToCart
+          product={product}
+          variants={product.variants}
+          availableForSale={product.availableForSale}
+        />
+      </Suspense>
 
       {product.descriptionHtml ? (
         <Prose
