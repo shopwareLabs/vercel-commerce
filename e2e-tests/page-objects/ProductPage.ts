@@ -32,13 +32,10 @@ export class ProductPage {
   }
 
   async selectVariant() {
-    await this.page.getByRole('button', { name: 'M' }).click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForSelector("button[title='Size M']");
+    await this.page.waitForLoadState('domcontentloaded');
     await this.page.getByRole('button', { name: 'blue' }).click();
     await this.page.waitForLoadState('networkidle');
+    await this.page.getByRole('button', { name: 'M' }).click();
   }
-
-  //  async changeProductVariant(){
-  //     await
-  //  }
 }

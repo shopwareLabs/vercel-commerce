@@ -15,8 +15,9 @@ dotenv.config({ path: findUpSync(process.env.ENV_FILE || '.env') });
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const newLocal = 'http://localhost:3000';
-const baseURL = process.env.BASE_E2E_URL || newLocal;
+
+const baseURL =
+  process.env.BASE_E2E_URL || 'https://shopware-vercel-commerce-shopware-frontends.vercel.app/';
 
 console.log('Running tests for: ', baseURL);
 

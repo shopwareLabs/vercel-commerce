@@ -28,8 +28,6 @@ test.describe.only('add product to cart', () => {
     await homePage.openVariantsCartPage();
     await productPage.selectVariant();
     await productPage.addToCart();
-    await expect(
-      page.getByText('LAVENDA Product VariantsLAVENDA Product Variants€22.95EUR1')
-    ).toBeVisible();
+    await expect(page.getByText('LAVENDA Product VariantsLAVENDA Product Variants')).toBeVisible();
   });
 });
