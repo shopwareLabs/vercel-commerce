@@ -14,20 +14,20 @@ dependencies:
 
 devDependencies:
   '@playwright/test':
-    specifier: ^1.40.1
-    version: 1.40.1
+    specifier: ^1.43.1
+    version: 1.43.1
   '@types/node':
     specifier: ^20.10.3
     version: 20.10.3
 
 packages:
 
-  /@playwright/test@1.40.1:
+  /@playwright/test@1.43.1:
     resolution: {integrity: sha512-EaaawMTOeEItCRvfmkI9v6rBkF1svM8wjl/YPRrg2N2Wmp+4qJYkWtJsbew1szfKKDm6fPLy4YAanBhIlf9dWw==}
     engines: {node: '>=16'}
     hasBin: true
     dependencies:
-      playwright: 1.40.1
+      playwright: 1.43.1
     dev: true
 
   /@types/node@20.10.3:
