@@ -26,7 +26,7 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
 
       - name: Install e2e-tests dependencies
-        run: cd e2e-tests && pnpm install --frozen-lockfile --prefer-offline
+        run: cd e2e-tests && pnpm install --no-frozen-lockfile --prefer-offline
 
       - name: Install e2e-tests dependencies with Playwright
         run: |
