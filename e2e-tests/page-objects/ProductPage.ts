@@ -26,9 +26,9 @@ export class ProductPage {
   async selectVariant() {
     await expect(async () => {
       await this.page.waitForSelector("button[title='Size M']");
-      await this.sizeLocator.dispatchEvent('click');
+      await this.colourLocator.click({ delay: 2000 });
       await this.page.waitForSelector("button[title='Colour blue']");
-      await this.colourLocator.dispatchEvent('click');
+      await this.sizeLocator.click();
       await expect(this.sizeLocator).toHaveClass(/ring-2/);
       await expect(this.colourLocator).toHaveClass(/ring-2/);
     }).toPass({
