@@ -12,6 +12,7 @@
     "prepare": "husky install",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
+    "prettier:fix": "pnpm prettier",
     "start": "next start",
     "test": "pnpm lint && pnpm prettier:check"
   },
