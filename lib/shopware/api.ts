@@ -44,7 +44,8 @@ export async function requestNavigation(
       {
         activeId: type,
         rootId: type,
-        depth: depth
+        depth: depth,
+        'sw-include-seo-urls': true
       }
     );
   } catch (error) {
@@ -95,7 +96,11 @@ export async function requestProductsCollection(
   criteria: Partial<ProductListingCriteria>
 ): Promise<ExtendedProductListingResult | undefined> {
   try {
-    return await getApiClient().invoke('readProduct post /product', criteria);
+    const result = (await getApiClient().invoke(
+      'readProduct post /product',
+      criteria
+    )) as unknown as ExtendedProductListingResult;
+    return result;
   } catch (error) {
     if (error instanceof ApiClientError) {
       console.error(error);

@@ -59,6 +59,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
 
     const errorMessage = alertErrorMessages(response);
     if (errorMessage !== '') {
+      revalidateTag(TAGS.cart);
       return errorMessage;
     }
     revalidateTag(TAGS.cart);
@@ -185,7 +186,7 @@ async function updateLineItem(lineId: string, variantId: string, quantity: numbe
           id: lineId,
           referencedId: variantId,
           quantity: quantity
-        }
+        } as unknown as ExtendedLineItem
       ]
     });
   } catch (error) {

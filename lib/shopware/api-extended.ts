@@ -96,8 +96,17 @@ type ProductTaxRules = {
   apiAlias: string;
 };
 
+export type ExtendedCmsSlot = Omit<schemas['CmsSlot'], 'config'> & {
+  config?: {
+    content: {
+      source: string;
+      value: string;
+    };
+  };
+};
+
 export type ExtendedCmsBlock = Omit<schemas['CmsBlock'], 'slots'> & {
-  slots?: schemas['CmsSlot'][];
+  slots?: ExtendedCmsSlot[];
 };
 
 export type ExtendedCmsSection = Omit<schemas['CmsSection'], 'blocks'> & {
