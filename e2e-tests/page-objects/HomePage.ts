@@ -22,7 +22,7 @@ export class HomePage extends AbstractPage {
 
   async openVariantsCartPage() {
     await this.page.waitForLoadState('networkidle');
-    await this.page.goto('/product/LAVENDA-Product-Variants/SW20004');
+    await this.page.goto('/product/LAVENDA-Product-Variants/SW20004?size=M&colour=blue');
   }
 
   async openCateoryPage() {
