@@ -15,8 +15,9 @@ dotenv.config({ path: findUpSync(process.env.ENV_FILE || '.env') });
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const newLocal = 'http://localhost:3000';
-const baseURL = process.env.BASE_E2E_URL || newLocal;
+
+const baseURL =
+  process.env.BASE_E2E_URL || 'https://shopware-vercel-commerce-shopware-frontends.vercel.app/';
 
 console.log('Running tests for: ', baseURL);
 
@@ -24,7 +25,7 @@ const config: PlaywrightTestConfig = {
   testDir: './tests',
   outputDir: './reports',
   /* Maximum time one test can run for. */
-  timeout: 30 * 1000,
+  timeout: 90 * 1000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
