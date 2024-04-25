@@ -12,6 +12,7 @@
     "prepare": "husky install",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
+    "prettier:fix": "pnpm prettier",
     "start": "next start",
     "test": "pnpm lint && pnpm prettier:check"
   },
@@ -27,7 +28,7 @@
     "next": "14.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sharp": "^0.32.6"
+    "sharp": "^0.33.0"
   },
   "devDependencies": {
     "@tailwindcss/container-queries": "^0.1.1",

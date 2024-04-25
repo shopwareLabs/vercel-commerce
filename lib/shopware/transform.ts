@@ -37,8 +37,8 @@ function transformMenuItem(item: ExtendedCategory, type: string): Menu {
         : '/search/' + item.seoUrls[0].seoPathInfo
       : ''
     : type === 'footer-navigation'
-    ? '/cms/' + item.id ?? ''
-    : '/search/' + item.id ?? '';
+      ? '/cms/' + item.id ?? ''
+      : '/search/' + item.id ?? '';
 
   // @ToDo: currently only footer-navigation is used for cms pages, this need to be more dynamic (shoud depending on the item)
   return {
