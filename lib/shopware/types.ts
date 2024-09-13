@@ -17,7 +17,7 @@ export type Page = {
   handle: string;
   body: string;
   bodySummary: string;
-  seo?: Schemas['SeoUrl'];
+  seo?: SEO;
   createdAt: string;
   updatedAt: string;
   routeName?: string;
@@ -106,4 +106,13 @@ export type Image = {
   altText: string;
   width: number;
   height: number;
+};
+
+export type Collection = {
+  handle: string;
+  title: string;
+  description: string;
+  seo: SEO;
+  childCount: number;
+  updatedAt: string;
 };

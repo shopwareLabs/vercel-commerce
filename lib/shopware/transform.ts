@@ -1,8 +1,16 @@
+import type { Schemas } from '#shopware';
+import { ListItem } from 'components/layout/search/filter';
+import { isSeoUrls } from 'lib/shopware/helpers';
 import {
-  ApiSchemas,
+  ExtendedCategory,
+  ExtendedCmsPage,
+  ExtendedLineItem,
+  ExtendedProduct,
+  ExtendedProductListingResult
+} from './api-extended';
+import {
   Cart,
   CartItem,
-  CategoryListingResultSW,
   Collection,
   Menu,
   Page,
@@ -10,18 +18,8 @@ import {
   ProductOption,
   ProductVariant
 } from './types';
-import {
-  ExtendedCart,
-  ExtendedCategory,
-  ExtendedCmsPage,
-  ExtendedLineItem,
-  ExtendedProduct,
-  ExtendedProductListingResult
-} from './api-extended';
-import { ListItem } from 'components/layout/search/filter';
-import { isSeoUrls } from 'lib/shopware/helpers';
 
-export function transformMenu(res: ExtendedCategory[], type: string) {
+export function transformMenu(res: Schemas['Category'][], type: string) {
   const menu: Menu[] = [];
 
   res.map((item) => menu.push(transformMenuItem(item, type)));
@@ -29,7 +27,7 @@ export function transformMenu(res: ExtendedCategory[], type: string) {
   return menu;
 }
 
-function transformMenuItem(item: ExtendedCategory, type: string): Menu {
+function transformMenuItem(item: Schemas['Category'], type: string): Menu {
   const path = isSeoUrls()
     ? item.seoUrls && item.seoUrls.length > 0 && item.seoUrls[0] && item.seoUrls[0].seoPathInfo
       ? type === 'footer-navigation'
@@ -37,8 +35,8 @@ function transformMenuItem(item: ExtendedCategory, type: string): Menu {
         : '/search/' + item.seoUrls[0].seoPathInfo
       : ''
     : type === 'footer-navigation'
-      ? '/cms/' + item.id ?? ''
-      : '/search/' + item.id ?? '';
+      ? '/cms/' + item.id
+      : '/search/' + item.id;
 
   // @ToDo: currently only footer-navigation is used for cms pages, this need to be more dynamic (shoud depending on the item)
   return {
@@ -51,12 +49,12 @@ function transformMenuItem(item: ExtendedCategory, type: string): Menu {
 }
 
 export function transformPage(
-  category: ExtendedCategory,
-  seoUrlElement?: ApiSchemas['SeoUrl']
+  category: Schemas['Category'],
+  seoUrlElement?: Schemas['SeoUrl']
 ): Page {
   let plainHtmlContent;
   if (category.cmsPage) {
-    const cmsPage: ExtendedCmsPage = category.cmsPage;
+    const cmsPage: Schemas['CmsPage'] = category.cmsPage;
     plainHtmlContent = transformToPlainHtmlContent(cmsPage);
   }
 
@@ -100,7 +98,7 @@ export function transformToPlainHtmlContent(cmsPage: ExtendedCmsPage): string {
 
 export function transformCollection(
   resCategory: ExtendedCategory,
-  seoUrlElement?: ApiSchemas['SeoUrl']
+  seoUrlElement?: Schemas['SeoUrl']
 ) {
   return {
     handle: seoUrlElement?.seoPathInfo ?? resCategory.id ?? '',
@@ -119,12 +117,12 @@ export function transformCollection(
 }
 
 export function transformSubCollection(
-  category: CategoryListingResultSW,
+  category: Schemas['EntitySearchResult'] & { elements: Schemas['Category'][] },
   parentCollectionName?: string
 ): Collection[] {
   const collection: Collection[] = [];
 
-  if (category.elements && category.elements[0] && category.elements[0].children) {
+  if (category?.elements && category.elements?.[0] && category.elements?.[0].children) {
     // we do not support type links at the moment and show only visible categories
     category.elements[0].children
       .filter((item) => item.visible)
@@ -152,7 +150,7 @@ export function transformSubCollection(
 }
 
 // small function to find longest handle and to make sure parent collection name is in the path
-function findHandle(seoUrls: ApiSchemas['SeoUrl'][], parentCollectionName?: string): string {
+function findHandle(seoUrls: Schemas['SeoUrl'][], parentCollectionName?: string): string {
   let handle: string = '';
   seoUrls.map((item) => {
     if (
@@ -334,7 +332,7 @@ export function transformHandle(handle: string | []): string {
   return collectionName ?? '';
 }
 
-export function transformCart(resCart: ExtendedCart): Cart {
+export function transformCart(resCart: Schemas['Cart']): Cart {
   return {
     checkoutUrl: 'https://frontends-demo.vercel.app',
     cost: {
