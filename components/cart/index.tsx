@@ -1,6 +1,6 @@
 import { getCart } from 'components/cart/actions';
-import CartModal from './modal';
 import { transformCart } from 'lib/shopware/transform';
+import CartModal from './modal';
 
 export default async function Cart() {
   let cart;

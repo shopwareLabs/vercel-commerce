@@ -1,18 +1,19 @@
 'use server';
 
-import { TAGS } from 'lib/constants';
+import { Schemas } from '#shopware';
 import { ApiClientError } from '@shopware/api-client';
+import { TAGS } from 'lib/constants';
 import { getApiClient } from 'lib/shopware/api';
 import { ExtendedCart, ExtendedLineItem, messageKeys } from 'lib/shopware/api-extended';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
-async function fetchCart(cartId?: string): Promise<ExtendedCart | undefined> {
+async function fetchCart(cartId?: string): Promise<Schemas['Cart'] | undefined> {
   try {
     const apiClient = getApiClient(cartId);
-    const cart = await apiClient.invoke('readCart get /checkout/cart?name', {});
+    const cart = await apiClient.invoke('readCart get /checkout/cart', {});
 
-    return cart;
+    return cart.data;
   } catch (error) {
     if (error instanceof ApiClientError) {
       console.error(error);
@@ -47,14 +48,16 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
     }
 
     const response = await apiClient.invoke('addLineItem post /checkout/cart/line-item', {
-      items: [
-        {
-          id: selectedVariantId,
-          quantity: quantity,
-          referencedId: selectedVariantId,
-          type: 'product'
-        }
-      ]
+      body: {
+        items: [
+          {
+            id: selectedVariantId,
+            quantity: quantity,
+            referencedId: selectedVariantId,
+            type: 'product'
+          }
+        ]
+      }
     });
 
     const errorMessage = alertErrorMessages(response);
@@ -83,7 +86,7 @@ export async function getCart() {
   return await fetchCart();
 }
 
-function updateCartCookie(cart: ExtendedCart): string | undefined {
+function updateCartCookie(cart: Schemas['Cart']): string | undefined {
   const cartId = cookies().get('sw-context-token')?.value;
   // cartId is set, but not valid anymore, update the cookie
   if (cartId && cart && cart.token && cart.token !== cartId) {
@@ -157,8 +160,10 @@ export async function removeItem(prevState: any, lineId: string) {
 
   try {
     const apiClient = getApiClient(cartId);
-    await apiClient.invoke('deleteLineItem delete /checkout/cart/line-item?id[]={ids}', {
-      ids: [lineId]
+    await apiClient.invoke('removeLineItem post /checkout/cart/line-item/delete', {
+      body: {
+        ids: [lineId]
+      }
     });
     revalidateTag(TAGS.cart);
   } catch (error) {
@@ -181,13 +186,15 @@ async function updateLineItem(lineId: string, variantId: string, quantity: numbe
   try {
     const apiClient = getApiClient(cartId);
     await apiClient.invoke('updateLineItem patch /checkout/cart/line-item', {
-      items: [
-        {
-          id: lineId,
-          referencedId: variantId,
-          quantity: quantity
-        } as unknown as ExtendedLineItem
-      ]
+      body: {
+        items: [
+          {
+            id: lineId,
+            referencedId: variantId,
+            quantity: quantity
+          } as unknown as ExtendedLineItem
+        ]
+      }
     });
   } catch (error) {
     if (error instanceof ApiClientError) {
