@@ -387,9 +387,9 @@ function transformLineItem(resLineItem: Schemas['LineItem']): CartItem {
         },
         availableForSale: true,
         featuredImage: {
-          url: resLineItem.cover?.media.url ?? '',
-          altText: resLineItem.cover?.media.translated?.alt ?? resLineItem.cover?.media?.alt ?? '',
-          width: Number(resLineItem.cover?.media.metaData?.width) ?? 0,
+          url: resLineItem.cover?.media?.url ?? '',
+          altText: resLineItem.cover?.media?.translated?.alt ?? resLineItem.cover?.media?.alt ?? '',
+          width: Number(resLineItem.cover?.media?.metaData?.width) ?? 0,
           height: Number(resLineItem.cover?.media?.metaData?.height) ?? 0
         },
         options: [],
