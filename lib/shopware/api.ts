@@ -92,7 +92,7 @@ export async function requestCategoryList(criteria: Schemas['Criteria']): Promis
 
 export async function requestProductsCollection(
   criteria: Schemas['Criteria']
-): Promise<Schemas['EntitySearchResult'] | undefined> {
+): Promise<(Schemas['EntitySearchResult'] & { elements: Schemas['Product'][] }) | undefined> {
   try {
     const result = await getApiClient().invoke('readProduct post /product', {
       body: { ...criteria }

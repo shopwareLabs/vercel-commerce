@@ -1,10 +1,10 @@
 'use client';
 
-import type { Schemas } from '#shopware';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { addItem } from 'components/cart/actions';
 import LoadingDots from 'components/loading-dots';
+import { Product, ProductVariant } from 'lib/shopware/types';
 import { useSearchParams } from 'next/navigation';
 import { useFormState, useFormStatus } from 'react-dom';
 function SubmitButton({
@@ -67,8 +67,8 @@ export function AddToCart({
   variants,
   availableForSale
 }: {
-  product: Schemas['Product'];
-  variants: (Schemas['Product'] & { selectedOptions: { name: string; value: string }[] })[];
+  product: Product;
+  variants: ProductVariant[];
   availableForSale: boolean;
 }) {
   const [message, formAction] = useFormState(addItem, null);

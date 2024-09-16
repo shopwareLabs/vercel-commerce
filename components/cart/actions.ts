@@ -4,7 +4,6 @@ import { Schemas } from '#shopware';
 import { ApiClientError } from '@shopware/api-client';
 import { TAGS } from 'lib/constants';
 import { getApiClient } from 'lib/shopware/api';
-import { ExtendedCart, ExtendedLineItem, messageKeys } from 'lib/shopware/api-extended';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
@@ -41,7 +40,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
 
     // this part allows us to click multiple times on addToCart and increase the qty with that
     const itemInCart = cart?.lineItems?.filter((item) => item.id === selectedVariantId) as
-      | ExtendedLineItem
+      | Schemas['LineItem']
       | undefined;
     if (itemInCart && itemInCart.quantity) {
       quantity = itemInCart.quantity + 1;
@@ -60,7 +59,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
       }
     });
 
-    const errorMessage = alertErrorMessages(response);
+    const errorMessage = alertErrorMessages(response.data);
     if (errorMessage !== '') {
       revalidateTag(TAGS.cart);
       return errorMessage;
@@ -102,11 +101,11 @@ function updateCartCookie(cart: Schemas['Cart']): string | undefined {
   return cartId;
 }
 
-function alertErrorMessages(response: ExtendedCart): string {
+function alertErrorMessages(response: Schemas['Cart']): string {
   let errorMessages: string = '';
   if (response.errors) {
     Object.values(response.errors).forEach(function (value) {
-      const messageKey: messageKeys = value.messageKey as messageKeys;
+      const messageKey: any = value.messageKey as any;
       if (value.message && messageKey) {
         errorMessages += value.message;
       }
@@ -192,7 +191,7 @@ async function updateLineItem(lineId: string, variantId: string, quantity: numbe
             id: lineId,
             referencedId: variantId,
             quantity: quantity
-          } as unknown as ExtendedLineItem
+          } as unknown as Schemas['LineItem']
         ]
       }
     });

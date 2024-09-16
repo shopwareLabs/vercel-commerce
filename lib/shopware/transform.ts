@@ -1,13 +1,7 @@
 import type { Schemas } from '#shopware';
 import { ListItem } from 'components/layout/search/filter';
 import { isSeoUrls } from 'lib/shopware/helpers';
-import {
-  ExtendedCategory,
-  ExtendedCmsPage,
-  ExtendedLineItem,
-  ExtendedProduct,
-  ExtendedProductListingResult
-} from './api-extended';
+
 import {
   Cart,
   CartItem,
@@ -76,14 +70,16 @@ export function transformPage(
   };
 }
 
-export function transformToPlainHtmlContent(cmsPage: ExtendedCmsPage): string {
+export function transformToPlainHtmlContent(cmsPage: Schemas['CmsPage']): string {
   let plainHtmlContent = '';
 
   cmsPage.sections?.map((section) => {
     section.blocks?.map((block) => {
       block.slots?.map((slot) => {
-        if (slot.slot === 'content' && slot.config?.content) {
-          const currentContent: string = slot.config.content.value + '';
+        // @ts-ignore
+        if (slot.slot === 'content' && slot.fieldConfig?.content) {
+          // @ts-ignore
+          const currentContent: string = slot.fieldConfig.content + '';
           // we do not add content with h1, because will be added via template already
           if (!currentContent.match(/(<\/?h)([1])/)) {
             plainHtmlContent += currentContent;
@@ -97,7 +93,7 @@ export function transformToPlainHtmlContent(cmsPage: ExtendedCmsPage): string {
 }
 
 export function transformCollection(
-  resCategory: ExtendedCategory,
+  resCategory: Schemas['Category'],
   seoUrlElement?: Schemas['SeoUrl']
 ) {
   return {
@@ -185,7 +181,7 @@ export function transformCollectionToList(collection: Collection[]): ListItem[] 
   return listItem;
 }
 
-export function transformProducts(res: ExtendedProductListingResult): Product[] {
+export function transformProducts(res: Schemas['ProductListingResult']): Product[] {
   const products: Product[] = [];
 
   if (res.elements && res.elements.length > 0) {
@@ -195,7 +191,7 @@ export function transformProducts(res: ExtendedProductListingResult): Product[] 
   return products;
 }
 
-export function transformProduct(item: ExtendedProduct): Product {
+export function transformProduct(item: Schemas['Product']): Product {
   const productOptions = transformOptions(item);
   const productVariants = transformVariants(item);
 
@@ -255,7 +251,7 @@ export function transformProduct(item: ExtendedProduct): Product {
   };
 }
 
-function transformOptions(parent: ExtendedProduct): ProductOption[] {
+function transformOptions(parent: Schemas['Product']): ProductOption[] {
   // we only transform options for parents with children, ignore child products with options
   const productOptions: ProductOption[] = [];
   if (parent.children && parent.parentId === null && parent.children.length > 0) {
@@ -288,7 +284,7 @@ function transformOptions(parent: ExtendedProduct): ProductOption[] {
   return productOptions;
 }
 
-function transformVariants(parent: ExtendedProduct): ProductVariant[] {
+function transformVariants(parent: Schemas['Product']): ProductVariant[] {
   const productVariants: ProductVariant[] = [];
   if (parent.children && parent.parentId === null && parent.children.length > 0) {
     parent.children.map((child) => {
@@ -351,12 +347,12 @@ export function transformCart(resCart: Schemas['Cart']): Cart {
     },
     id: resCart.token ?? '',
     lines:
-      resCart.lineItems?.map((lineItem: ExtendedLineItem) => transformLineItem(lineItem)) || [],
+      resCart.lineItems?.map((lineItem: Schemas['LineItem']) => transformLineItem(lineItem)) || [],
     totalQuantity: resCart.lineItems ? calculateTotalCartQuantity(resCart.lineItems) : 0
   };
 }
 
-function calculateTotalCartQuantity(lineItems: ExtendedLineItem[]) {
+function calculateTotalCartQuantity(lineItems: Schemas['LineItem'][]) {
   let totalQuantity = 0;
   lineItems.forEach((lineItem) => {
     totalQuantity += lineItem.quantity ?? 0;
@@ -365,7 +361,7 @@ function calculateTotalCartQuantity(lineItems: ExtendedLineItem[]) {
   return totalQuantity;
 }
 
-function transformLineItem(resLineItem: ExtendedLineItem): CartItem {
+function transformLineItem(resLineItem: Schemas['LineItem']): CartItem {
   return {
     id: resLineItem.id || '',
     quantity: resLineItem.quantity ?? 0,
@@ -391,10 +387,10 @@ function transformLineItem(resLineItem: ExtendedLineItem): CartItem {
         },
         availableForSale: true,
         featuredImage: {
-          url: resLineItem.cover?.url ?? '',
-          altText: resLineItem.cover?.translated?.alt ?? resLineItem.cover?.alt ?? '',
-          width: Number(resLineItem.cover?.metaData?.width) ?? 0,
-          height: Number(resLineItem.cover?.metaData?.height) ?? 0
+          url: resLineItem.cover?.media.url ?? '',
+          altText: resLineItem.cover?.media.translated?.alt ?? resLineItem.cover?.media?.alt ?? '',
+          width: Number(resLineItem.cover?.media.metaData?.width) ?? 0,
+          height: Number(resLineItem.cover?.media?.metaData?.height) ?? 0
         },
         options: [],
         variants: [],

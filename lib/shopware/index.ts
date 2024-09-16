@@ -11,7 +11,6 @@ import {
   requestSeoUrl,
   requestSeoUrls
 } from './api';
-import { ExtendedCategory, ExtendedProduct, ExtendedProductListingResult } from './api-extended';
 import {
   getDefaultCategoryCriteria,
   getDefaultCategoryWithCmsCriteria,
@@ -83,12 +82,11 @@ export async function getFirstSeoUrlElement(
   }
 }
 
-export async function getFirstProduct(productId: string): Promise<ExtendedProduct | undefined> {
+export async function getFirstProduct(productId: string): Promise<Schemas['Product'] | undefined> {
   const productCriteria = getDefaultProductCriteria(productId);
-  const listing: ExtendedProductListingResult | undefined =
-    await requestProductsCollection(productCriteria);
-  if (listing && listing.elements && listing.elements.length > 0 && listing.elements[0]) {
-    return listing.elements[0];
+  const listing = await requestProductsCollection(productCriteria);
+  if (listing && listing?.elements && listing?.elements?.length > 0 && listing?.elements?.[0]) {
+    return listing?.elements[0];
   }
 }
 
@@ -96,7 +94,7 @@ export async function getFirstProduct(productId: string): Promise<ExtendedProduc
 export async function getSubCollections(collection: string) {
   const collectionName = decodeURIComponent(transformHandle(collection ?? ''));
   let criteria = getDefaultSubCategoriesCriteria(collectionName);
-  let res: Schemas[] | undefined = undefined;
+  let res = undefined;
   const parentCollectionName =
     Array.isArray(collection) && collection[0] ? collection[0] : undefined;
 
@@ -109,7 +107,7 @@ export async function getSubCollections(collection: string) {
 
   // @ts-ignore
   res = await requestCategoryList(criteria);
-
+  // @ts-ignore
   return res ? transformSubCollection(res, parentCollectionName) : [];
 }
 
@@ -208,7 +206,7 @@ export async function getCollectionProducts(params?: {
 export async function getCategory(
   categoryId: string,
   cms: boolean = false
-): Promise<ExtendedCategory | undefined> {
+): Promise<Schemas['Category'] | undefined> {
   const criteria = cms ? getDefaultCategoryWithCmsCriteria() : getDefaultCategoryCriteria();
   return await requestCategory(categoryId, criteria);
 }
@@ -253,7 +251,7 @@ export async function getProductSeoUrls() {
 }
 
 export async function getProduct(handle: string | []): Promise<Product | undefined> {
-  let productSW: ExtendedProduct | undefined;
+  let productSW: Schemas['Product'] | undefined;
   let productId: string | undefined;
   const productHandle = decodeURIComponent(transformHandle(handle));
   productId = productHandle; // if we do not use seoUrls the handle should be the product id
@@ -280,7 +278,7 @@ export async function getProduct(handle: string | []): Promise<Product | undefin
 }
 
 export async function getProductRecommendations(productId: string): Promise<Product[]> {
-  const products = {} as unknown as ExtendedProductListingResult;
+  const products = {} as unknown as Schemas['ProductListingResult'];
 
   const res = await requestCrossSell(productId, getDefaultCrossSellingCriteria());
   // @ToDo: Make this more dynamic to merge multiple Cross-Sellings, at the moment we only get the first one
