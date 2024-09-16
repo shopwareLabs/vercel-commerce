@@ -1,0 +1,37 @@
+{
+  "components": {
+    "Media": {
+      "properties": {
+        "metaData": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "ProductMedia": {
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "metaData": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

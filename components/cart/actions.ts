@@ -104,8 +104,8 @@ function updateCartCookie(cart: Schemas['Cart']): string | undefined {
 function alertErrorMessages(response: Schemas['Cart']): string {
   let errorMessages: string = '';
   if (response.errors) {
-    Object.values(response.errors).forEach(function (value) {
-      const messageKey: any = value.messageKey as any;
+    Object.values(response.errors as Schemas['CartError']).forEach(function (value) {
+      const messageKey: any = value.messageKey;
       if (value.message && messageKey) {
         errorMessages += value.message;
       }

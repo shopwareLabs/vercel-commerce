@@ -362,6 +362,7 @@ function calculateTotalCartQuantity(lineItems: Schemas['LineItem'][]) {
 }
 
 function transformLineItem(resLineItem: Schemas['LineItem']): CartItem {
+  console.warn('media', resLineItem.cover);
   return {
     id: resLineItem.id || '',
     quantity: resLineItem.quantity ?? 0,
@@ -389,8 +390,8 @@ function transformLineItem(resLineItem: Schemas['LineItem']): CartItem {
         featuredImage: {
           url: resLineItem.cover?.url ?? '',
           altText: resLineItem.cover?.media?.translated?.alt ?? resLineItem.cover?.media?.alt ?? '',
-          width: Number(resLineItem.cover?.media?.metaData?.width) ?? 0,
-          height: Number(resLineItem.cover?.media?.metaData?.height) ?? 0
+          width: Number(resLineItem.cover?.metaData?.width) ?? 0,
+          height: Number(resLineItem.cover?.metaData?.height) ?? 0
         },
         options: [],
         variants: [],
