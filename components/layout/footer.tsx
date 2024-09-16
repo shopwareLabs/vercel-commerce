@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import Image from 'next/image';
 
+import GitHubIcon from 'components/icons/github';
 import FooterMenu from 'components/layout/footer-menu';
 import LogoSquare from 'components/logo-square';
-import GitHubIcon from 'components/icons/github';
 import { getMenu } from 'lib/shopware';
 import { Suspense } from 'react';
 
@@ -69,12 +68,7 @@ export default async function Footer() {
               className="text-black dark:text-white"
             >
               <div className="ml-4 h-auto w-10">
-                <Image
-                  src="https://www.shopware.com/media/pages/solutions/shopware-frontends/shopware-frontends-intro-graphic-base.svg"
-                  alt="Shopware Composable Frontends Logo"
-                  width={40}
-                  height={40}
-                ></Image>
+                <LogoSquare size="sm" />
               </div>
             </a>
           </div>
