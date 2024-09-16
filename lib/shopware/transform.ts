@@ -362,7 +362,6 @@ function calculateTotalCartQuantity(lineItems: Schemas['LineItem'][]) {
 }
 
 function transformLineItem(resLineItem: Schemas['LineItem']): CartItem {
-  console.warn('media', resLineItem.cover);
   return {
     id: resLineItem.id || '',
     quantity: resLineItem.quantity ?? 0,
