@@ -35,11 +35,11 @@ export function getDefaultSearchProductsCriteria(
   query: string,
   page: number = 1,
   limit: number = 100
-) {
+): Schemas['Criteria'] {
   return {
     page: page,
     limit: limit,
-    query: query,
+    term: query,
     associations: {
       options: {},
       media: {},
@@ -52,10 +52,10 @@ export function getDefaultSearchProductsCriteria(
         }
       }
     }
-  } as unknown as Schemas['Criteria'];
+  };
 }
 
-function getDefaultProductAssociations() {
+function getDefaultProductAssociations(): Schemas['Criteria']['associations'] {
   return {
     options: {
       associations: {
@@ -75,7 +75,7 @@ function getDefaultProductAssociations() {
         seoUrls: {}
       }
     }
-  } as unknown as Schemas['Criteria']['associations'];
+  };
 }
 
 export function getDefaultCategoryCriteria(
@@ -201,7 +201,10 @@ export function getDefaultSubCategoriesCriteria(
   };
 }
 
-export function getDefaultCrossSellingCriteria(page: number = 1, limit: number = 1) {
+export function getDefaultCrossSellingCriteria(
+  page: number = 1,
+  limit: number = 1
+): Schemas['Criteria'] {
   return {
     page: page,
     limit: limit,
@@ -217,7 +220,7 @@ export function getDefaultCrossSellingCriteria(page: number = 1, limit: number =
         value: true
       }
     ]
-  } as unknown as Schemas['Criteria'];
+  };
 }
 
 export function getSeoUrlCriteria(

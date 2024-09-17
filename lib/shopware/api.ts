@@ -146,7 +146,7 @@ export async function requestSearchCollectionProducts(
     const response = await getApiClient().invoke('searchPage post /search', {
       body: {
         ...criteria,
-        search: encodeURIComponent((criteria?.query as unknown as string) || '')
+        search: encodeURIComponent(criteria?.term || '')
       }
     });
     return response.data;
