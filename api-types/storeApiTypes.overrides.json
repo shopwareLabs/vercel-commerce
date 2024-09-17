@@ -1,5 +1,19 @@
 {
   "components": {
+    "Product": {
+      "properties": {
+        "calculatedCheapestPrice": {
+          "required": ["apiAlias"]
+        }
+      }
+    },
+    "Criteria": {
+      "properties": {
+        "associations": {
+          "$ref": "#/components/schemas/Association"
+        }
+      }
+    },
     "Media": {
       "properties": {
         "metaData": {

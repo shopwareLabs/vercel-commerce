@@ -90,9 +90,12 @@ export async function requestCategoryList(criteria: Schemas['Criteria']): Promis
   }
 }
 
-export async function requestProductsCollection(
-  criteria: Schemas['Criteria']
-): Promise<(Schemas['EntitySearchResult'] & { elements: Schemas['Product'][] }) | undefined> {
+export async function requestProductsCollection(criteria: Schemas['Criteria']): Promise<
+  | ({
+      elements?: Schemas['Product'][];
+    } & Schemas['EntitySearchResult'])
+  | undefined
+> {
   try {
     const result = await getApiClient().invoke('readProduct post /product', {
       body: { ...criteria }
@@ -143,7 +146,7 @@ export async function requestSearchCollectionProducts(
     const response = await getApiClient().invoke('searchPage post /search', {
       body: {
         ...criteria,
-        search: encodeURIComponent(criteria?.query || '')
+        search: encodeURIComponent((criteria?.query as unknown as string) || '')
       }
     });
     return response.data;

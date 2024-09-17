@@ -1381,7 +1381,7 @@ export type Schemas = {
   Criteria: {
     aggregations?: components['schemas']['Aggregations'];
     /** Associations to include. For more information, see [Search Queries > Associations](https://shopware.stoplight.io/docs/store-api/cf710bf73d0cd-search-queries#associations) */
-    associations?: components['schemas']['Association'][];
+    associations?: components['schemas']['Association'];
     /** Fields which should be returned in the search result. */
     fields?: string[];
     /** List of filters to restrict the search result. For more information, see [Search Queries > Filter](https://shopware.stoplight.io/docs/store-api/docs/concepts/search-queries.md#filter) */
@@ -3555,19 +3555,23 @@ export type Schemas = {
     available?: boolean;
     /** Format: int64 */
     availableStock?: number;
-    calculatedCheapestPrice?: components['schemas']['CalculatedPrice'] & {
-      /** @enum {string} */
-      hasRange?: boolean;
-      listPrice?: components['schemas']['CartListPrice'] | null;
-      quantity?: number;
-      referencePrice?: components['schemas']['CartPriceReference'] | null;
-      regulationPrice?: {
-        price: number;
-      } | null;
-      totalPrice?: number;
-      unitPrice?: number;
-      variantId?: string | null;
-    };
+    calculatedCheapestPrice?: WithRequired<
+      components['schemas']['CalculatedPrice'] & {
+        /** @enum {string} */
+        apiAlias?: 'calculated_cheapest_price';
+        hasRange?: boolean;
+        listPrice?: components['schemas']['CartListPrice'] | null;
+        quantity?: number;
+        referencePrice?: components['schemas']['CartPriceReference'] | null;
+        regulationPrice?: {
+          price: number;
+        } | null;
+        totalPrice?: number;
+        unitPrice?: number;
+        variantId?: string | null;
+      },
+      'apiAlias'
+    >;
     /**
      * Format: int64
      * Runtime field, cannot be used as part of the criteria.
