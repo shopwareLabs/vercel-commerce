@@ -4,10 +4,9 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { addItem } from 'components/cart/actions';
 import LoadingDots from 'components/loading-dots';
-import { ProductVariant, Product } from 'lib/shopware/types';
+import { Product, ProductVariant } from 'lib/shopware/types';
 import { useSearchParams } from 'next/navigation';
 import { useFormState, useFormStatus } from 'react-dom';
-
 function SubmitButton({
   availableForSale,
   selectedVariantId
@@ -75,7 +74,7 @@ export function AddToCart({
   const [message, formAction] = useFormState(addItem, null);
   const searchParams = useSearchParams();
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : product.id;
-  const variant = variants.find((variant: ProductVariant) =>
+  const variant = variants.find((variant) =>
     variant.selectedOptions.every(
       (option) => option.value === searchParams.get(option.name.toLowerCase())
     )

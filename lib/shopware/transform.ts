@@ -1,8 +1,10 @@
+import type { Schemas } from '#shopware';
+import { ListItem } from 'components/layout/search/filter';
+import { isSeoUrls } from 'lib/shopware/helpers';
+
 import {
-  ApiSchemas,
   Cart,
   CartItem,
-  CategoryListingResultSW,
   Collection,
   Menu,
   Page,
@@ -10,18 +12,8 @@ import {
   ProductOption,
   ProductVariant
 } from './types';
-import {
-  ExtendedCart,
-  ExtendedCategory,
-  ExtendedCmsPage,
-  ExtendedLineItem,
-  ExtendedProduct,
-  ExtendedProductListingResult
-} from './api-extended';
-import { ListItem } from 'components/layout/search/filter';
-import { isSeoUrls } from 'lib/shopware/helpers';
 
-export function transformMenu(res: ExtendedCategory[], type: string) {
+export function transformMenu(res: Schemas['Category'][], type: string) {
   const menu: Menu[] = [];
 
   res.map((item) => menu.push(transformMenuItem(item, type)));
@@ -29,7 +21,7 @@ export function transformMenu(res: ExtendedCategory[], type: string) {
   return menu;
 }
 
-function transformMenuItem(item: ExtendedCategory, type: string): Menu {
+function transformMenuItem(item: Schemas['Category'], type: string): Menu {
   const path = isSeoUrls()
     ? item.seoUrls && item.seoUrls.length > 0 && item.seoUrls[0] && item.seoUrls[0].seoPathInfo
       ? type === 'footer-navigation'
@@ -37,8 +29,8 @@ function transformMenuItem(item: ExtendedCategory, type: string): Menu {
         : '/search/' + item.seoUrls[0].seoPathInfo
       : ''
     : type === 'footer-navigation'
-      ? '/cms/' + item.id ?? ''
-      : '/search/' + item.id ?? '';
+      ? '/cms/' + item.id
+      : '/search/' + item.id;
 
   // @ToDo: currently only footer-navigation is used for cms pages, this need to be more dynamic (shoud depending on the item)
   return {
@@ -51,12 +43,12 @@ function transformMenuItem(item: ExtendedCategory, type: string): Menu {
 }
 
 export function transformPage(
-  category: ExtendedCategory,
-  seoUrlElement?: ApiSchemas['SeoUrl']
+  category: Schemas['Category'],
+  seoUrlElement?: Schemas['SeoUrl']
 ): Page {
   let plainHtmlContent;
   if (category.cmsPage) {
-    const cmsPage: ExtendedCmsPage = category.cmsPage;
+    const cmsPage: Schemas['CmsPage'] = category.cmsPage;
     plainHtmlContent = transformToPlainHtmlContent(cmsPage);
   }
 
@@ -78,14 +70,16 @@ export function transformPage(
   };
 }
 
-export function transformToPlainHtmlContent(cmsPage: ExtendedCmsPage): string {
+export function transformToPlainHtmlContent(cmsPage: Schemas['CmsPage']): string {
   let plainHtmlContent = '';
 
   cmsPage.sections?.map((section) => {
     section.blocks?.map((block) => {
       block.slots?.map((slot) => {
-        if (slot.slot === 'content' && slot.config?.content) {
-          const currentContent: string = slot.config.content.value + '';
+        // @ts-ignore
+        if (slot.slot === 'content' && slot.fieldConfig?.content) {
+          // @ts-ignore
+          const currentContent: string = slot.fieldConfig.content + '';
           // we do not add content with h1, because will be added via template already
           if (!currentContent.match(/(<\/?h)([1])/)) {
             plainHtmlContent += currentContent;
@@ -99,8 +93,8 @@ export function transformToPlainHtmlContent(cmsPage: ExtendedCmsPage): string {
 }
 
 export function transformCollection(
-  resCategory: ExtendedCategory,
-  seoUrlElement?: ApiSchemas['SeoUrl']
+  resCategory: Schemas['Category'],
+  seoUrlElement?: Schemas['SeoUrl']
 ) {
   return {
     handle: seoUrlElement?.seoPathInfo ?? resCategory.id ?? '',
@@ -119,12 +113,12 @@ export function transformCollection(
 }
 
 export function transformSubCollection(
-  category: CategoryListingResultSW,
+  category: Schemas['EntitySearchResult'] & { elements: Schemas['Category'][] },
   parentCollectionName?: string
 ): Collection[] {
   const collection: Collection[] = [];
 
-  if (category.elements && category.elements[0] && category.elements[0].children) {
+  if (category?.elements && category.elements?.[0] && category.elements?.[0].children) {
     // we do not support type links at the moment and show only visible categories
     category.elements[0].children
       .filter((item) => item.visible)
@@ -152,7 +146,7 @@ export function transformSubCollection(
 }
 
 // small function to find longest handle and to make sure parent collection name is in the path
-function findHandle(seoUrls: ApiSchemas['SeoUrl'][], parentCollectionName?: string): string {
+function findHandle(seoUrls: Schemas['SeoUrl'][], parentCollectionName?: string): string {
   let handle: string = '';
   seoUrls.map((item) => {
     if (
@@ -187,7 +181,7 @@ export function transformCollectionToList(collection: Collection[]): ListItem[] 
   return listItem;
 }
 
-export function transformProducts(res: ExtendedProductListingResult): Product[] {
+export function transformProducts(res: Schemas['ProductListingResult']): Product[] {
   const products: Product[] = [];
 
   if (res.elements && res.elements.length > 0) {
@@ -197,7 +191,7 @@ export function transformProducts(res: ExtendedProductListingResult): Product[] 
   return products;
 }
 
-export function transformProduct(item: ExtendedProduct): Product {
+export function transformProduct(item: Schemas['Product']): Product {
   const productOptions = transformOptions(item);
   const productVariants = transformVariants(item);
 
@@ -257,7 +251,7 @@ export function transformProduct(item: ExtendedProduct): Product {
   };
 }
 
-function transformOptions(parent: ExtendedProduct): ProductOption[] {
+function transformOptions(parent: Schemas['Product']): ProductOption[] {
   // we only transform options for parents with children, ignore child products with options
   const productOptions: ProductOption[] = [];
   if (parent.children && parent.parentId === null && parent.children.length > 0) {
@@ -290,7 +284,7 @@ function transformOptions(parent: ExtendedProduct): ProductOption[] {
   return productOptions;
 }
 
-function transformVariants(parent: ExtendedProduct): ProductVariant[] {
+function transformVariants(parent: Schemas['Product']): ProductVariant[] {
   const productVariants: ProductVariant[] = [];
   if (parent.children && parent.parentId === null && parent.children.length > 0) {
     parent.children.map((child) => {
@@ -334,7 +328,7 @@ export function transformHandle(handle: string | []): string {
   return collectionName ?? '';
 }
 
-export function transformCart(resCart: ExtendedCart): Cart {
+export function transformCart(resCart: Schemas['Cart']): Cart {
   return {
     checkoutUrl: 'https://frontends-demo.vercel.app',
     cost: {
@@ -353,12 +347,12 @@ export function transformCart(resCart: ExtendedCart): Cart {
     },
     id: resCart.token ?? '',
     lines:
-      resCart.lineItems?.map((lineItem: ExtendedLineItem) => transformLineItem(lineItem)) || [],
+      resCart.lineItems?.map((lineItem: Schemas['LineItem']) => transformLineItem(lineItem)) || [],
     totalQuantity: resCart.lineItems ? calculateTotalCartQuantity(resCart.lineItems) : 0
   };
 }
 
-function calculateTotalCartQuantity(lineItems: ExtendedLineItem[]) {
+function calculateTotalCartQuantity(lineItems: Schemas['LineItem'][]) {
   let totalQuantity = 0;
   lineItems.forEach((lineItem) => {
     totalQuantity += lineItem.quantity ?? 0;
@@ -367,7 +361,7 @@ function calculateTotalCartQuantity(lineItems: ExtendedLineItem[]) {
   return totalQuantity;
 }
 
-function transformLineItem(resLineItem: ExtendedLineItem): CartItem {
+function transformLineItem(resLineItem: Schemas['LineItem']): CartItem {
   return {
     id: resLineItem.id || '',
     quantity: resLineItem.quantity ?? 0,
@@ -394,7 +388,7 @@ function transformLineItem(resLineItem: ExtendedLineItem): CartItem {
         availableForSale: true,
         featuredImage: {
           url: resLineItem.cover?.url ?? '',
-          altText: resLineItem.cover?.translated?.alt ?? resLineItem.cover?.alt ?? '',
+          altText: resLineItem.cover?.media?.translated?.alt ?? resLineItem.cover?.media?.alt ?? '',
           width: Number(resLineItem.cover?.metaData?.width) ?? 0,
           height: Number(resLineItem.cover?.metaData?.height) ?? 0
         },

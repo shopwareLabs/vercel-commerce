@@ -1,4 +1,9 @@
-export function getDefaultProductsCriteria(page: number = 1, limit: number = 15) {
+import { Schemas } from '#shopware';
+
+export function getDefaultProductsCriteria(
+  page: number = 1,
+  limit: number = 15
+): Schemas['Criteria'] {
   return {
     p: page,
     limit: limit,
@@ -7,7 +12,11 @@ export function getDefaultProductsCriteria(page: number = 1, limit: number = 15)
   };
 }
 
-export function getDefaultProductCriteria(productId: string, page: number = 1, limit: number = 1) {
+export function getDefaultProductCriteria(
+  productId: string,
+  page: number = 1,
+  limit: number = 1
+): Schemas['Criteria'] {
   return {
     page: page,
     limit: limit,
@@ -26,11 +35,11 @@ export function getDefaultSearchProductsCriteria(
   query: string,
   page: number = 1,
   limit: number = 100
-) {
+): Schemas['Criteria'] {
   return {
     page: page,
     limit: limit,
-    query: query,
+    term: query,
     associations: {
       options: {},
       media: {},
@@ -46,7 +55,7 @@ export function getDefaultSearchProductsCriteria(
   };
 }
 
-function getDefaultProductAssociations() {
+function getDefaultProductAssociations(): Schemas['Criteria']['associations'] {
   return {
     options: {
       associations: {
@@ -69,7 +78,10 @@ function getDefaultProductAssociations() {
   };
 }
 
-export function getDefaultCategoryCriteria(page: number = 1, limit: number = 1) {
+export function getDefaultCategoryCriteria(
+  page: number = 1,
+  limit: number = 1
+): Schemas['Criteria'] {
   return {
     page: page,
     limit: limit,
@@ -189,7 +201,10 @@ export function getDefaultSubCategoriesCriteria(
   };
 }
 
-export function getDefaultCrossSellingCriteria(page: number = 1, limit: number = 1) {
+export function getDefaultCrossSellingCriteria(
+  page: number = 1,
+  limit: number = 1
+): Schemas['Criteria'] {
   return {
     page: page,
     limit: limit,
@@ -208,7 +223,11 @@ export function getDefaultCrossSellingCriteria(page: number = 1, limit: number =
   };
 }
 
-export function getSeoUrlCriteria(handle: string, page: number = 1, limit: number = 1) {
+export function getSeoUrlCriteria(
+  handle: string,
+  page: number = 1,
+  limit: number = 1
+): Schemas['Criteria'] {
   return {
     page: page,
     limit: limit,
@@ -233,7 +252,7 @@ export function getSeoUrlCriteria(handle: string, page: number = 1, limit: numbe
   };
 }
 
-export function getSortingCriteria(sortKey?: string, reverse?: boolean) {
+export function getSortingCriteria(sortKey?: string, reverse?: boolean): Schemas['Criteria'] {
   switch (true) {
     case sortKey === 'CREATED_AT' && reverse === true:
       return {

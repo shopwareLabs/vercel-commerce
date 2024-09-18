@@ -9,7 +9,7 @@ export type ImageProps = {
 export default function LogoIcon(props: ImageProps) {
   return (
     <Image
-      src="https://www.shopware.com/media/pages/solutions/shopware-frontends/shopware-frontends-intro-graphic-base.svg"
+      src="/logo-next.svg"
       alt="Shopware Composable Frontends Logo"
       width={Number(props.width)}
       height={Number(props.height)}

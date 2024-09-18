@@ -1,7 +1,5 @@
-import { headers } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
-import { revalidateTag } from 'next/cache';
-import { TAGS } from 'lib/constants';
+import { isSeoUrls } from 'lib/shopware/helpers';
+import { NextResponse } from 'next/server';
 import {
   requestCategory,
   requestCategoryList,
@@ -13,7 +11,6 @@ import {
   requestSeoUrl,
   requestSeoUrls
 } from './api';
-import { ExtendedCategory, ExtendedProduct, ExtendedProductListingResult } from './api-extended';
 import {
   getDefaultCategoryCriteria,
   getDefaultCategoryWithCmsCriteria,
@@ -34,19 +31,12 @@ import {
   transformProducts,
   transformSubCollection
 } from './transform';
-import {
-  ApiSchemas,
-  CategoryListingResultSW,
-  Menu,
-  Page,
-  Product,
-  ProductListingCriteria,
-  StoreNavigationTypeSW
-} from './types';
-import { isSeoUrls } from 'lib/shopware/helpers';
+
+import { Schemas } from '#shopware';
+import type { Menu, Page, Product } from './types';
 
 export async function getMenu(params?: {
-  type?: StoreNavigationTypeSW;
+  type?: Schemas['NavigationType'];
   depth?: number;
 }): Promise<Menu[]> {
   const type = params?.type || 'main-navigation';
@@ -84,7 +74,7 @@ export async function getPage(handle: string | []): Promise<Page | undefined> {
 
 export async function getFirstSeoUrlElement(
   handle: string
-): Promise<ApiSchemas['SeoUrl'] | undefined> {
+): Promise<Schemas['SeoUrl'] | undefined> {
   const seoURLCriteria = getSeoUrlCriteria(handle);
   const seoURL = await requestSeoUrl(seoURLCriteria);
   if (seoURL && seoURL.elements && seoURL.elements.length > 0 && seoURL.elements[0]) {
@@ -92,12 +82,11 @@ export async function getFirstSeoUrlElement(
   }
 }
 
-export async function getFirstProduct(productId: string): Promise<ExtendedProduct | undefined> {
+export async function getFirstProduct(productId: string): Promise<Schemas['Product'] | undefined> {
   const productCriteria = getDefaultProductCriteria(productId);
-  const listing: ExtendedProductListingResult | undefined =
-    await requestProductsCollection(productCriteria);
-  if (listing && listing.elements && listing.elements.length > 0 && listing.elements[0]) {
-    return listing.elements[0];
+  const listing = await requestProductsCollection(productCriteria);
+  if (listing && listing?.elements && listing?.elements?.length > 0 && listing?.elements?.[0]) {
+    return listing?.elements[0];
   }
 }
 
@@ -105,7 +94,7 @@ export async function getFirstProduct(productId: string): Promise<ExtendedProduc
 export async function getSubCollections(collection: string) {
   const collectionName = decodeURIComponent(transformHandle(collection ?? ''));
   let criteria = getDefaultSubCategoriesCriteria(collectionName);
-  let res: CategoryListingResultSW | undefined = undefined;
+  let res = undefined;
   const parentCollectionName =
     Array.isArray(collection) && collection[0] ? collection[0] : undefined;
 
@@ -118,7 +107,7 @@ export async function getSubCollections(collection: string) {
 
   // @ts-ignore
   res = await requestCategoryList(criteria);
-
+  // @ts-ignore
   return res ? transformSubCollection(res, parentCollectionName) : [];
 }
 
@@ -127,7 +116,7 @@ export async function getSearchCollectionProducts(params?: {
   reverse?: boolean;
   sortKey?: string;
   categoryId?: string;
-  defaultSearchCriteria?: Partial<ProductListingCriteria>;
+  defaultSearchCriteria?: Partial<Schemas['Criteria']>;
 }) {
   const searchQuery = params?.query ?? '';
   const criteria = getDefaultSearchProductsCriteria(searchQuery);
@@ -143,9 +132,9 @@ export async function getSearchCollectionProducts(params?: {
 }
 
 export async function changeVariantUrlToParentUrl(
-  collection: ExtendedProductListingResult
-): Promise<ExtendedProduct[]> {
-  const newElements: ExtendedProduct[] = [];
+  collection: Schemas['ProductListingResult']
+): Promise<Schemas['Product'][]> {
+  const newElements: Schemas['Product'][] = [];
   if (collection.elements && collection.elements.length > 0) {
     await Promise.all(
       collection.elements.map(async (item) => {
@@ -170,7 +159,7 @@ export async function getCollectionProducts(params?: {
   reverse?: boolean;
   sortKey?: string;
   categoryId?: string;
-  defaultSearchCriteria?: Partial<ProductListingCriteria>;
+  defaultSearchCriteria?: Schemas['Criteria'];
 }): Promise<{ products: Product[]; total: number; limit: number }> {
   let products;
   let category = params?.categoryId;
@@ -217,7 +206,7 @@ export async function getCollectionProducts(params?: {
 export async function getCategory(
   categoryId: string,
   cms: boolean = false
-): Promise<ExtendedCategory | undefined> {
+): Promise<Schemas['Category'] | undefined> {
   const criteria = cms ? getDefaultCategoryWithCmsCriteria() : getDefaultCategoryCriteria();
   return await requestCategory(categoryId, criteria);
 }
@@ -262,7 +251,7 @@ export async function getProductSeoUrls() {
 }
 
 export async function getProduct(handle: string | []): Promise<Product | undefined> {
-  let productSW: ExtendedProduct | undefined;
+  let productSW: Schemas['Product'] | undefined;
   let productId: string | undefined;
   const productHandle = decodeURIComponent(transformHandle(handle));
   productId = productHandle; // if we do not use seoUrls the handle should be the product id
@@ -289,7 +278,7 @@ export async function getProduct(handle: string | []): Promise<Product | undefin
 }
 
 export async function getProductRecommendations(productId: string): Promise<Product[]> {
-  const products = {} as unknown as ExtendedProductListingResult;
+  const products = {} as unknown as Schemas['ProductListingResult'];
 
   const res = await requestCrossSell(productId, getDefaultCrossSellingCriteria());
   // @ToDo: Make this more dynamic to merge multiple Cross-Sellings, at the moment we only get the first one
@@ -301,38 +290,10 @@ export async function getProductRecommendations(productId: string): Promise<Prod
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.
-export async function revalidate(req: NextRequest): Promise<NextResponse> {
+export async function revalidate(): Promise<NextResponse> {
   return NextResponse.json({
     status: 200,
     message: 'This is currently not working and was never tested.',
     now: Date.now()
   });
-  // We always need to respond with a 200 status code,
-  // otherwise it will continue to retry the request.
-  const collectionWebhooks = ['collections/create', 'collections/delete', 'collections/update'];
-  const productWebhooks = ['products/create', 'products/delete', 'products/update'];
-  const topic = headers().get('x-shopware-topic') || 'unknown';
-  const secret = req.nextUrl.searchParams.get('secret');
-  const isCollectionUpdate = collectionWebhooks.includes(topic);
-  const isProductUpdate = productWebhooks.includes(topic);
-
-  if (!secret || secret !== process.env.SHOPWARE_REVALIDATION_SECRET) {
-    console.error('Invalid revalidation secret.');
-    return NextResponse.json({ status: 200 });
-  }
-
-  if (!isCollectionUpdate && !isProductUpdate) {
-    // We don't need to revalidate anything for any other topics.
-    return NextResponse.json({ status: 200 });
-  }
-
-  if (isCollectionUpdate) {
-    revalidateTag(TAGS.collections);
-  }
-
-  if (isProductUpdate) {
-    revalidateTag(TAGS.products);
-  }
-
-  return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
 }

@@ -1,0 +1,54 @@
+{
+  "components": {
+    "Product": {
+      "properties": {
+        "calculatedCheapestPrice": {
+          "required": ["apiAlias"]
+        }
+      }
+    },
+    "Criteria": {
+      "properties": {
+        "p": {
+          "type": "number"
+        },
+        "associations": {
+          "$ref": "#/components/schemas/Association"
+        }
+      }
+    },
+    "Media": {
+      "properties": {
+        "metaData": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "ProductMedia": {
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "metaData": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}
