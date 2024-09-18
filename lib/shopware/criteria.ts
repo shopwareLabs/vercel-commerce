@@ -5,7 +5,7 @@ export function getDefaultProductsCriteria(
   limit: number = 15
 ): Schemas['Criteria'] {
   return {
-    page: page,
+    p: page,
     limit: limit,
     associations: getDefaultProductAssociations(),
     filter: []

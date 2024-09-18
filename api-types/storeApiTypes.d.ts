@@ -459,7 +459,7 @@ export type Schemas = {
     id: string;
     lineItems?: components['schemas']['B2bComponentsShoppingListLineItem'][];
     name?: string;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     salesChannelId: string;
     /** Format: date-time */
     updatedAt?: string;
@@ -475,7 +475,7 @@ export type Schemas = {
     employeeId?: string;
     id: string;
     name?: string;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     relationships?: {
       customer?: {
         data?: {
@@ -532,7 +532,7 @@ export type Schemas = {
     /** Format: date-time */
     createdAt: string;
     id: string;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     product?: components['schemas']['Product'];
     productId?: string;
     productVersionId?: string;
@@ -545,7 +545,7 @@ export type Schemas = {
     /** Format: date-time */
     createdAt: string;
     id: string;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     productId?: string;
     productVersionId?: string;
     /** Format: int64 */
@@ -603,6 +603,38 @@ export type Schemas = {
     name: string;
     /** Format: date-time */
     updatedAt?: string;
+  };
+  Breadcrumb: {
+    /** @enum {string} */
+    apiAlias: 'breadcrumb';
+    categoryId: string;
+    name: string;
+    path: string;
+    seoUrls?: components['schemas']['SeoUrl'][];
+    translated: {
+      categoryId: string;
+      customFields?: GenericRecord;
+      description?: string;
+      externalLink?: string;
+      internalLink?: string;
+      keywords?: string;
+      linkNewTab?: boolean;
+      /** @enum {string} */
+      linkType?: 'external' | 'category' | 'product' | 'landing_page';
+      metaDescription?: string;
+      metaTitle?: string;
+      name: string;
+      path: string;
+      slotConfig?: GenericRecord;
+      type: string;
+    };
+    /** @enum {string} */
+    type: 'page' | 'link' | 'folder';
+  };
+  BreadcrumbCollection: {
+    /** @enum {string} */
+    apiAlias: 'breadcrumb_collection';
+    breadcrumbs: components['schemas']['Breadcrumb'][];
   };
   CalculatedPrice: {
     /** @enum {string} */
@@ -1398,6 +1430,7 @@ export type Schemas = {
     includes?: components['schemas']['Include'];
     /** Number of items per result page */
     limit?: number;
+    p?: number;
     /** Search result page */
     page?: number;
     /** Filters that applied without affecting aggregations. For more information, see [Search Queries > Post Filter](https://shopware.stoplight.io/docs/store-api/docs/concepts/search-queries.md#post-filter) */
@@ -1726,6 +1759,7 @@ export type Schemas = {
     createdAt: string;
     customer?: components['schemas']['Customer'];
     customerId: string;
+    features: GenericRecord;
     id?: string;
     /** Format: date-time */
     updatedAt?: string;
@@ -3002,6 +3036,7 @@ export type Schemas = {
     priceDefinition?: components['schemas']['CartPriceQuantity'];
     productId?: string;
     productVersionId?: string;
+    promotionId?: string;
     /** Format: int64 */
     quantity: number;
     referencedId?: string;
@@ -3021,6 +3056,7 @@ export type Schemas = {
       parentVersionId: string;
       productId: string;
       productVersionId: string;
+      promotionId: string;
       referencedId: string;
       type: string;
       versionId: string;
@@ -3547,6 +3583,24 @@ export type Schemas = {
       /** The section name */
       sectionName?: string | null;
     }[];
+  };
+  Price: {
+    currencyId: string;
+    gross: number;
+    linked?: boolean;
+    listPrice?: {
+      currencyId?: string;
+      gross: number;
+      linked?: boolean;
+      net: number;
+    };
+    net: number;
+    regulationPrice?: {
+      currencyId?: string;
+      gross: number;
+      linked?: boolean;
+      net: number;
+    };
   };
   Product: {
     active?: boolean;
@@ -4953,9 +5007,9 @@ export type Schemas = {
     position: number;
     priceDefinition?: GenericRecord;
     productId?: string;
-    productPrice?: GenericRecord;
+    productPrice?: components['schemas']['Price'][];
     productVersionId?: string;
-    purchasePrice?: GenericRecord;
+    purchasePrice?: components['schemas']['Price'][];
     /** Format: int64 */
     quantity: number;
     quoteId: string;
@@ -5623,7 +5677,7 @@ export type Schemas = {
     calculationRuleId?: string;
     /** Format: date-time */
     createdAt: string;
-    currencyPrice?: GenericRecord;
+    currencyPrice?: components['schemas']['Price'][];
     customFields?: GenericRecord;
     id: string;
     /** Format: float */
@@ -5943,7 +5997,7 @@ export type Schemas = {
     description?: string;
     /** Format: float */
     discountPercentage?: number;
-    discountPrice?: GenericRecord;
+    discountPrice?: components['schemas']['Price'][];
     id: string;
     label?: string;
     /** Format: int64 */
@@ -5975,7 +6029,7 @@ export type Schemas = {
     description?: string;
     /** Format: float */
     discountPercentage?: number;
-    discountPrice?: GenericRecord;
+    discountPrice?: components['schemas']['Price'][];
     id: string;
     label?: string;
     /** Format: int64 */
@@ -6365,7 +6419,7 @@ export type Schemas = {
     placeholder?: string;
     /** Format: int64 */
     position?: number;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     prices?: components['schemas']['SwagCustomizedProductsTemplateOptionPrice'][];
     relativeSurcharge?: boolean;
     required?: boolean;
@@ -6406,7 +6460,7 @@ export type Schemas = {
     placeholder?: string;
     /** Format: int64 */
     position?: number;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     relationships?: {
       prices?: {
         data?: {
@@ -6510,7 +6564,7 @@ export type Schemas = {
     id: string;
     /** Format: float */
     percentageSurcharge?: number;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     rule?: components['schemas']['Rule'];
     ruleId?: string;
     templateOption?: components['schemas']['SwagCustomizedProductsTemplateOption'];
@@ -6533,7 +6587,7 @@ export type Schemas = {
     percentageSurcharge?: number;
     /** Format: int64 */
     position: number;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     prices?: components['schemas']['SwagCustomizedProductsTemplateOptionValuePrice'][];
     relativeSurcharge?: boolean;
     tax?: components['schemas']['Tax'];
@@ -6568,7 +6622,7 @@ export type Schemas = {
     percentageSurcharge?: number;
     /** Format: int64 */
     position: number;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     relationships?: {
       prices?: {
         data?: {
@@ -6654,7 +6708,7 @@ export type Schemas = {
     id: string;
     /** Format: float */
     percentageSurcharge?: number;
-    price?: GenericRecord;
+    price?: components['schemas']['Price'][];
     rule?: components['schemas']['Rule'];
     ruleId?: string;
     templateOptionValue?: components['schemas']['SwagCustomizedProductsTemplateOptionValue'];
@@ -7746,6 +7800,22 @@ export type operations = {
       priority?: number;
     };
     response: components['schemas']['ApprovalRule'];
+    responseCode: 200;
+  };
+  'readBreadcrumb get /breadcrumb/{id}': {
+    contentType?: 'application/json';
+    accept?: 'application/json';
+    query?: {
+      /** Type: category or product (optional - default: product) */
+      type?: 'product' | 'category';
+      /** UUID for referrer category only used for product breadcrumb */
+      referrerCategoryId?: string;
+    };
+    pathParams: {
+      /** UUID for product or category */
+      id: string;
+    };
+    response: components['schemas']['BreadcrumbCollection'];
     responseCode: 200;
   };
   'readCategoryList post /category': {

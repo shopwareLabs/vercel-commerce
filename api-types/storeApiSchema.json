@@ -7,7 +7,7 @@
       "name": "MIT",
       "url": "https://github.com/shopware/shopware/blob/trunk/LICENSE"
     },
-    "version": "6.6.4.0"
+    "version": "6.6.6.0"
   },
   "servers": [{ "url": "https://demo-frontends.shopware.store/store-api" }],
   "components": {
@@ -865,7 +865,10 @@
               "customerId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
               "employeeId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
               "customFields": { "type": "object" },
-              "price": { "type": "object" },
+              "price": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Price" }
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time",
@@ -985,7 +988,10 @@
           "customerId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "employeeId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "customFields": { "type": "object" },
-          "price": { "type": "object" },
+          "price": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -1020,7 +1026,10 @@
                 "type": "string",
                 "pattern": "^[0-9a-f]{32}$"
               },
-              "price": { "type": "object" },
+              "price": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Price" }
+              },
               "quantity": { "type": "integer", "format": "int64" },
               "createdAt": {
                 "type": "string",
@@ -1075,7 +1084,10 @@
           "id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "productId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "productVersionId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
-          "price": { "type": "object" },
+          "price": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
           "quantity": { "type": "integer", "format": "int64" },
           "createdAt": {
             "type": "string",
@@ -2579,10 +2591,11 @@
         "type": "object"
       },
       "CustomerSpecificFeatures": {
-        "required": ["customerId", "createdAt"],
+        "required": ["customerId", "features", "createdAt"],
         "properties": {
           "id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "customerId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+          "features": { "type": "object" },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -4419,6 +4432,7 @@
           "orderVersionId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "productId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "productVersionId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+          "promotionId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "parentId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "parentVersionId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "coverId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
@@ -7487,8 +7501,14 @@
           "unitPrice": { "type": "number", "format": "float" },
           "totalPrice": { "type": "number", "format": "float" },
           "priceDefinition": { "type": "object" },
-          "productPrice": { "type": "object" },
-          "purchasePrice": { "type": "object" },
+          "productPrice": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
+          "purchasePrice": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
           "discount": {
             "properties": {
               "type": { "type": "string" },
@@ -8350,7 +8370,10 @@
           },
           "quantityStart": { "type": "number", "format": "float" },
           "quantityEnd": { "type": "number", "format": "float" },
-          "currencyPrice": { "type": "object" },
+          "currencyPrice": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
           "customFields": { "type": "object" },
           "createdAt": {
             "type": "string",
@@ -8850,7 +8873,10 @@
               },
               "discountPercentage": { "type": "number", "format": "float" },
               "label": { "type": "string" },
-              "discountPrice": { "type": "object" },
+              "discountPrice": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Price" }
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time",
@@ -8918,7 +8944,10 @@
           },
           "discountPercentage": { "type": "number", "format": "float" },
           "label": { "type": "string" },
-          "discountPrice": { "type": "object" },
+          "discountPrice": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -9676,7 +9705,10 @@
               "relativeSurcharge": { "type": "boolean" },
               "advancedSurcharge": { "type": "boolean" },
               "position": { "type": "integer", "format": "int64" },
-              "price": { "type": "object" },
+              "price": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Price" }
+              },
               "calculatedPrice": { "type": "object" },
               "percentageSurcharge": { "type": "number", "format": "float" },
               "templateId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
@@ -9869,7 +9901,10 @@
           "relativeSurcharge": { "type": "boolean" },
           "advancedSurcharge": { "type": "boolean" },
           "position": { "type": "integer", "format": "int64" },
-          "price": { "type": "object" },
+          "price": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
           "calculatedPrice": { "type": "object" },
           "percentageSurcharge": { "type": "number", "format": "float" },
           "templateId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
@@ -9920,7 +9955,10 @@
             "type": "string",
             "pattern": "^[0-9a-f]{32}$"
           },
-          "price": { "type": "object" },
+          "price": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
           "percentageSurcharge": { "type": "number", "format": "float" },
           "ruleId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "createdAt": {
@@ -9964,7 +10002,10 @@
               "relativeSurcharge": { "type": "boolean" },
               "advancedSurcharge": { "type": "boolean" },
               "position": { "type": "integer", "format": "int64" },
-              "price": { "type": "object" },
+              "price": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Price" }
+              },
               "percentageSurcharge": { "type": "number", "format": "float" },
               "taxId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
               "createdAt": {
@@ -10123,7 +10164,10 @@
           "relativeSurcharge": { "type": "boolean" },
           "advancedSurcharge": { "type": "boolean" },
           "position": { "type": "integer", "format": "int64" },
-          "price": { "type": "object" },
+          "price": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
           "percentageSurcharge": { "type": "number", "format": "float" },
           "taxId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "createdAt": {
@@ -10169,7 +10213,10 @@
             "type": "string",
             "pattern": "^[0-9a-f]{32}$"
           },
-          "price": { "type": "object" },
+          "price": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Price" }
+          },
           "percentageSurcharge": { "type": "number", "format": "float" },
           "ruleId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
           "createdAt": {
@@ -11059,6 +11106,40 @@
         },
         "required": ["name", "type", "field"]
       },
+      "Breadcrumb": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "categoryId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+          "type": { "type": "string", "enum": ["page", "link", "folder"] },
+          "translated": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "customFields": { "type": "object" },
+              "slotConfig": { "type": "object" },
+              "linkType": {
+                "type": "string",
+                "enum": ["external", "category", "product", "landing_page"]
+              },
+              "internalLink": { "type": "string" },
+              "externalLink": { "type": "string" },
+              "linkNewTab": { "type": "boolean" },
+              "description": { "type": "string" },
+              "metaTitle": { "type": "string" },
+              "metaDescription": { "type": "string" },
+              "keywords": { "type": "string" }
+            }
+          },
+          "path": { "type": "string" },
+          "seoUrls": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SeoUrl" }
+          },
+          "apiAlias": { "type": "string", "enum": ["breadcrumb"] }
+        },
+        "required": ["name", "categoryId", "type", "translated", "path", "apiAlias"]
+      },
       "CalculatedPrice": {
         "type": "object",
         "description": "Represents a product along with detailed information required to display a variant selection.",
@@ -11845,6 +11926,39 @@
         },
         "required": ["orders"]
       },
+      "Price": {
+        "type": "object",
+        "description": "Price object",
+        "properties": {
+          "currencyId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+          "gross": { "description": "", "type": "number" },
+          "net": { "description": "", "type": "number" },
+          "linked": { "description": "", "type": "boolean" },
+          "listPrice": {
+            "description": "",
+            "type": "object",
+            "properties": {
+              "currencyId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+              "gross": { "description": "", "type": "number" },
+              "net": { "description": "", "type": "number" },
+              "linked": { "description": "", "type": "boolean" }
+            },
+            "required": ["gross", "net"]
+          },
+          "regulationPrice": {
+            "description": "",
+            "type": "object",
+            "properties": {
+              "currencyId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+              "gross": { "description": "", "type": "number" },
+              "net": { "description": "", "type": "number" },
+              "linked": { "description": "", "type": "boolean" }
+            },
+            "required": ["gross", "net"]
+          }
+        },
+        "required": ["currencyId", "gross", "net"]
+      },
       "ProductDetailResponse": {
         "type": "object",
         "description": "Represents a product along with detailed information required to display a variant selection.",
@@ -12326,6 +12440,17 @@
           },
           "products": { "$ref": "#/components/schemas/ProductListingResult" }
         }
+      },
+      "BreadcrumbCollection": {
+        "type": "object",
+        "properties": {
+          "breadcrumbs": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Breadcrumb" }
+          },
+          "apiAlias": { "type": "string", "enum": ["breadcrumb_collection"] }
+        },
+        "required": ["breadcrumbs", "apiAlias"]
       },
       "NaturalLanguageSearchTermResponse": {
         "type": "array",
@@ -15557,6 +15682,51 @@
               }
             }
           }
+        },
+        "security": [{ "ApiKey": [] }]
+      }
+    },
+    "/breadcrumb/{id}": {
+      "get": {
+        "tags": ["Experimental", "Breadcrumb"],
+        "summary": "Experimental API, not part of our backwards compatibility promise, thus this API can introduce breaking changes at any time.",
+        "description": "Perform search to get category or product breadcrumb.",
+        "operationId": "readBreadcrumb",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "UUID for product or category",
+            "required": true,
+            "schema": { "type": "string", "pattern": "^[0-9a-f]{32}$" }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Type: category or product (optional - default: product)",
+            "required": false,
+            "schema": { "type": "string", "enum": ["product", "category"] }
+          },
+          {
+            "name": "referrerCategoryId",
+            "in": "query",
+            "description": "UUID for referrer category only used for product breadcrumb",
+            "required": false,
+            "schema": { "type": "string", "pattern": "^[0-9a-f]{32}$" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search result containing SeoUrl\\'s to be used as breadcrumb.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BreadcrumbCollection"
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/400" }
         },
         "security": [{ "ApiKey": [] }]
       }

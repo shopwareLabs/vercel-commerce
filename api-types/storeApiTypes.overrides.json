@@ -9,6 +9,9 @@
     },
     "Criteria": {
       "properties": {
+        "p": {
+          "type": "number"
+        },
         "associations": {
           "$ref": "#/components/schemas/Association"
         }
