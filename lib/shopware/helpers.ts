@@ -10,7 +10,7 @@ export function getStoreDomainWithApiType(): string {
 
 export function getStoreDomain(): string {
   return process.env.SHOPWARE_STORE_DOMAIN
-    ? ensureStartsWith(process.env.SHOPWARE_STORE_DOMAIN, 'https://')
+    ? ensureStartsWith(process.env.SHOPWARE_STORE_DOMAIN, 'http://')
     : '';
 }
 

@@ -65,12 +65,12 @@ export default function Pagination({
           key={i}
           onClick={() => handlePageClick(i)}
           className={`m-2 rounded-lg border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700 sm:m-0 sm:mx-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white [&.active]:bg-gray-100 cursor-pointer${
-            i === currentPage ? ' active ' : ''
+            i === currentPage ? 'active' : ''
           }`}
         >
           <a
             className={`ml-0 flex h-10 items-center justify-center px-4 leading-tight${
-              i === currentPage ? ' font-bold' : ''
+              i === currentPage ? 'font-bold' : ''
             }`}
             aria-label={`Goto Page ${i + 1}`}
             aria-current={i === currentPage}

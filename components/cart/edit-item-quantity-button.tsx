@@ -1,9 +1,10 @@
+import { useActionState } from 'react';
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { updateItemQuantity } from 'components/cart/actions';
 import LoadingDots from 'components/loading-dots';
 import { CartItem } from 'lib/shopware/types';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 
 function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
   const { pending } = useFormStatus();
@@ -36,7 +37,7 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
 }
 
 export function EditItemQuantityButton({ item, type }: { item: CartItem; type: 'plus' | 'minus' }) {
-  const [message, formAction] = useFormState(updateItemQuantity, null);
+  const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
     lineId: item.id,
     variantId: item.id,

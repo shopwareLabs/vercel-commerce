@@ -11,11 +11,10 @@ import { getCollection, getCollectionProducts } from 'lib/shopware';
 import { transformHandle } from 'lib/shopware/transform';
 import { defaultSort, sorting } from 'lib/constants';
 
-export async function generateMetadata({
-  params
-}: {
-  params: { collection: string };
+export async function generateMetadata(props: {
+  params: Promise<{ collection: string }>;
 }): Promise<Metadata> {
+  const params = await props.params;
   // see https://github.com/facebook/react/issues/25994
   const collectionName = decodeURIComponent(transformHandle(params?.collection ?? ''));
   if (collectionName.includes('.js.map')) {
@@ -33,13 +32,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({
-  params,
-  searchParams
-}: {
-  params: { collection: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
+export default async function CategoryPage(props: {
+  params: Promise<{ collection: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const { sort, page } = searchParams as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
 

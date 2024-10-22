@@ -5,7 +5,7 @@ import { ApiClientError } from '@shopware/api-client';
 import { TAGS } from 'lib/constants';
 import { getApiClient } from 'lib/shopware/api';
 import { revalidateTag } from 'next/cache';
-import { cookies } from 'next/headers';
+import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
 
 async function fetchCart(cartId?: string): Promise<Schemas['Cart'] | undefined> {
   try {
@@ -76,7 +76,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
 }
 
 export async function getCart() {
-  const cartId = cookies().get('sw-context-token')?.value;
+  const cartId = (await cookies()).get('sw-context-token')?.value;
 
   if (cartId) {
     return await fetchCart(cartId);
@@ -86,15 +86,15 @@ export async function getCart() {
 }
 
 function updateCartCookie(cart: Schemas['Cart']): string | undefined {
-  const cartId = cookies().get('sw-context-token')?.value;
+  const cartId = (cookies() as unknown as UnsafeUnwrappedCookies).get('sw-context-token')?.value;
   // cartId is set, but not valid anymore, update the cookie
   if (cartId && cart && cart.token && cart.token !== cartId) {
-    cookies().set('sw-context-token', cart.token);
+    (cookies() as unknown as UnsafeUnwrappedCookies).set('sw-context-token', cart.token);
     return cart.token;
   }
   // cartId is not set (undefined), case for new cart, set the cookie
   if (!cartId && cart && cart.token) {
-    cookies().set('sw-context-token', cart.token);
+    (cookies() as unknown as UnsafeUnwrappedCookies).set('sw-context-token', cart.token);
     return cart.token;
   }
   // cartId is set and the same like cart.token, return it
@@ -123,7 +123,7 @@ export async function updateItemQuantity(
     quantity: number;
   }
 ) {
-  const cartId = cookies().get('sw-context-token')?.value;
+  const cartId = (await cookies()).get('sw-context-token')?.value;
 
   if (!cartId) {
     return 'Missing cart ID';
@@ -151,7 +151,7 @@ export async function updateItemQuantity(
 }
 
 export async function removeItem(prevState: any, lineId: string) {
-  const cartId = cookies().get('sw-context-token')?.value;
+  const cartId = (await cookies()).get('sw-context-token')?.value;
 
   if (!cartId) {
     return 'Missing cart ID';
@@ -176,7 +176,7 @@ export async function removeItem(prevState: any, lineId: string) {
 }
 
 async function updateLineItem(lineId: string, variantId: string, quantity: number) {
-  const cartId = cookies().get('sw-context-token')?.value;
+  const cartId = (await cookies()).get('sw-context-token')?.value;
 
   if (!cartId) {
     return { message: 'Missing cart ID' } as Error;
