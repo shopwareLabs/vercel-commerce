@@ -15,7 +15,7 @@ A Next.js 14 and App Router-ready ecommerce template featuring:
 ## Prerequisites
 
 Next.js Shopware Starter requires a running [Shopware 6 Instance (Installation Guide)](https://developer.shopware.com/docs/guides/installation).
-
+https://developer.shopware.com/docs/guides/installation
 To get started, use this README and the example environment variable comments.
 
 ## Running locally
