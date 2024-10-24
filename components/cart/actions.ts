@@ -6,6 +6,7 @@ import { TAGS } from 'lib/constants';
 import { getApiClient } from 'lib/shopware/api';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 async function fetchCart(cartId?: string): Promise<Schemas['Cart'] | undefined> {
   try {
@@ -76,7 +77,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
 }
 
 export async function getCart() {
-  const cartId = cookies().get('sw-context-token')?.value;
+  const cartId = (await cookies()).get('sw-context-token')?.value;
 
   if (cartId) {
     return await fetchCart(cartId);
@@ -91,14 +92,6 @@ function updateCartCookie(cart: Schemas['Cart']): string | undefined {
   if (cartId && cart && cart.token && cart.token !== cartId) {
     cookies().set('sw-context-token', cart.token);
     return cart.token;
-  }
-  // cartId is not set (undefined), case for new cart, set the cookie
-  if (!cartId && cart && cart.token) {
-    cookies().set('sw-context-token', cart.token);
-    return cart.token;
-  }
-  // cartId is set and the same like cart.token, return it
-  return cartId;
 }
 
 function alertErrorMessages(response: Schemas['Cart']): string {
@@ -118,8 +111,7 @@ function alertErrorMessages(response: Schemas['Cart']): string {
 export async function updateItemQuantity(
   prevState: any,
   payload: {
-    lineId: string;
-    variantId: string;
+    merchandiseId: string;
     quantity: number;
   }
 ) {
@@ -129,7 +121,7 @@ export async function updateItemQuantity(
     return 'Missing cart ID';
   }
 
-  const { lineId, variantId, quantity } = payload;
+  const { merchandiseId, quantity } = payload;
 
   try {
     if (quantity === 0) {
@@ -203,4 +195,26 @@ async function updateLineItem(lineId: string, variantId: string, quantity: numbe
       console.error('==>', error);
     }
   }
+}
+
+export async function redirectToCheckout() {
+  let cartId = (await cookies()).get('cartId')?.value;
+
+  if (!cartId) {
+    return 'Missing cart ID';
+  }
+
+  let cart = await getCart(cartId);
+
+  if (!cart) {
+    return 'Error fetching cart';
+  }
+
+  redirect(cart.checkoutUrl);
+
+}
+
+export async function createCartAndSetCookie() {
+  let cart = await getCart();
+  cookies().set('cartId', cart?.token!);
 }
