@@ -36,23 +36,8 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
   );
 }
 
-export function EditItemQuantityButton({
-  item,
-  type,
-  optimisticUpdate
-}: {
-  item: CartItem;
-  type: 'plus' | 'minus';
-  optimisticUpdate?: (
-    prevState: unknown,
-    payload: {
-      lineId: string | undefined;
-      variantId: string | undefined;
-      quantity: number;
-    }
-  ) => void;
-}) {
-  const [message, formAction] = useActionState(optimisticUpdate || updateItemQuantity, null);
+export function EditItemQuantityButton({ item, type }: { item: CartItem; type: 'plus' | 'minus' }) {
+  const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
     lineId: item.id,
     variantId: item.id,

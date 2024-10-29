@@ -14,7 +14,8 @@ export function DeleteItemButton({
 }) {
   const [message, formAction] = useActionState(removeItem, null);
   const merchandiseId = item.merchandise.id;
-  const actionWithVariant = formAction.bind(merchandiseId);
+  // @ts-expect-error second argument is mandatory
+  const actionWithVariant = formAction.bind(null, merchandiseId);
 
   return (
     <form
