@@ -125,7 +125,11 @@ async function RelatedProducts({ id }: { id: string }) {
             key={product.path}
             className="aspect-square w-full flex-none min-[475px]:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5"
           >
-            <Link className="relative h-full w-full" prefetch={true} href={`/product/${product.path}`}>
+            <Link
+              className="relative h-full w-full"
+              prefetch={true}
+              href={`/product/${product.path}`}
+            >
               <GridTileImage
                 alt={product.title}
                 label={{
