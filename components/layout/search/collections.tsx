@@ -2,11 +2,14 @@ import clsx from 'clsx';
 import { Suspense } from 'react';
 
 import { getSubCollections } from 'lib/shopware';
-import FilterList from './filter';
 import { transformCollectionToList } from 'lib/shopware/transform';
+import FilterList from './filter';
 
-async function CollectionList({ collection }: { collection: string }) {
-  const collections = await getSubCollections(collection);
+async function CollectionList(params: Promise<{ collection: string }>) {
+  const { collection: collectionName } = await params;
+  if (!collectionName) return;
+
+  const collections = await getSubCollections(collectionName);
   if (collections) {
     const list = transformCollectionToList(collections);
     if (list.length > 0) return <FilterList list={list} title="Sub-Collections" />;
@@ -17,7 +20,8 @@ const skeleton = 'mb-3 h-4 w-5/6 animate-pulse rounded';
 const activeAndTitles = 'bg-neutral-800 dark:bg-neutral-300';
 const items = 'bg-neutral-400 dark:bg-neutral-700';
 
-export default function Collections({ collection }: { collection: string }) {
+export default async function Collections(params: Promise<{ collection: string }>) {
+  const { collection } = await params;
   return (
     <Suspense
       fallback={

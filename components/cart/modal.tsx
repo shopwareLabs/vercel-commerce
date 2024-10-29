@@ -8,7 +8,6 @@ import { createUrl } from 'lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { useFormStatus } from 'react-dom';
 import { createCartAndSetCookie } from './actions';
 import { useCart } from './cart-context';
 import CloseCart from './close-cart';
@@ -81,7 +80,7 @@ export default function CartModal() {
                 </button>
               </div>
 
-              {!cart || cart.lines.length === 0 ? (
+              {!cart || cart.lines?.length === 0 ? (
                 <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
                   <ShoppingCartIcon className="h-16" />
                   <p className="mt-6 text-center text-2xl font-bold">Your cart is empty.</p>
@@ -90,10 +89,10 @@ export default function CartModal() {
                 <div className="flex h-full flex-col justify-between overflow-hidden p-1">
                   <ul className="flex-grow overflow-auto py-4">
                     {cart.lines
-                      .sort((a, b) =>
+                      ?.sort((a, b) =>
                         a.merchandise.product.title.localeCompare(b.merchandise.product.title)
                       )
-                      .map((item, i) => {
+                      ?.map((item, i) => {
                         const merchandiseSearchParams = {} as MerchandiseSearchParams;
 
                         item.merchandise.selectedOptions.forEach(({ name, value }) => {
@@ -102,10 +101,10 @@ export default function CartModal() {
                           }
                         });
 
-                      const merchandiseUrl = createUrl(
-                        `/product/${item.merchandise.product.path}`,
-                        new URLSearchParams(merchandiseSearchParams)
-                      );
+                        const merchandiseUrl = createUrl(
+                          `/product/${item.merchandise.product.path}`,
+                          new URLSearchParams(merchandiseSearchParams)
+                        );
 
                         return (
                           <li
@@ -178,8 +177,8 @@ export default function CartModal() {
                       <p>Taxes</p>
                       <Price
                         className="text-right text-base text-black dark:text-white"
-                        amount={cart.cost.totalTaxAmount.amount}
-                        currencyCode={cart.cost.totalTaxAmount.currencyCode}
+                        amount={cart?.cost?.totalTaxAmount.amount}
+                        currencyCode={cart?.cost?.totalTaxAmount.currencyCode}
                       />
                     </div>
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
@@ -190,8 +189,8 @@ export default function CartModal() {
                       <p>Total</p>
                       <Price
                         className="text-right text-base text-black dark:text-white"
-                        amount={cart.cost.totalAmount.amount}
-                        currencyCode={cart.cost.totalAmount.currencyCode}
+                        amount={cart?.cost?.totalAmount.amount}
+                        currencyCode={cart?.cost?.totalAmount.currencyCode}
                       />
                     </div>
                   </div>
@@ -225,16 +224,16 @@ export default function CartModal() {
   );
 }
 
-function CheckoutButton() {
-  const { pending } = useFormStatus();
+// function CheckoutButton() {
+//   const { pending } = useFormStatus();
 
-  return (
-    <button
-      className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
-      type="submit"
-      disabled={pending}
-    >
-      {pending ? <LoadingDots className="bg-white" /> : 'Proceed to Checkout'}
-    </button>
-  );
-}
+//   return (
+//     <button
+//       className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
+//       type="submit"
+//       disabled={pending}
+//     >
+//       {pending ? <LoadingDots className="bg-white" /> : 'Proceed to Checkout'}
+//     </button>
+//   );
+// }

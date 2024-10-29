@@ -76,10 +76,8 @@ export function transformToPlainHtmlContent(cmsPage: Schemas['CmsPage']): string
   cmsPage.sections?.map((section) => {
     section.blocks?.map((block) => {
       block.slots?.map((slot) => {
-        // @ts-ignore
-        if (slot.slot === 'content' && slot.fieldConfig?.content) {
-          // @ts-ignore
-          const currentContent: string = slot.fieldConfig.content + '';
+        if (slot.slot === 'content' && (slot.fieldConfig as { content: string })?.content) {
+          const currentContent: string = (slot?.fieldConfig as { content: string })?.content + '';
           // we do not add content with h1, because will be added via template already
           if (!currentContent.match(/(<\/?h)([1])/)) {
             plainHtmlContent += currentContent;
@@ -113,7 +111,7 @@ export function transformCollection(
 }
 
 export function transformSubCollection(
-  category: Schemas['EntitySearchResult'] & { elements: Schemas['Category'][] },
+  category: (Schemas['EntitySearchResult'] & { elements: Schemas['Category'][] }) | undefined,
   parentCollectionName?: string
 ): Collection[] {
   const collection: Collection[] = [];
@@ -206,14 +204,15 @@ export function transformProduct(item: Schemas['Product']): Product {
   return {
     id: item.id ?? '',
     path: path,
+    handle: item.id ?? '',
     availableForSale: item.available ?? false,
-    title: item.translated ? item.translated.name ?? '' : item.name,
+    title: item.translated ? (item.translated.name ?? '') : item.name,
     description: item.translated?.metaDescription
-      ? item.translated.metaDescription ?? ''
-      : item.metaDescription ?? '',
+      ? (item.translated.metaDescription ?? '')
+      : (item.metaDescription ?? ''),
     descriptionHtml: item.translated?.description
-      ? item.translated.description ?? ''
-      : item.description ?? '',
+      ? (item.translated.description ?? '')
+      : (item.description ?? ''),
     options: productOptions,
     priceRange: {
       maxVariantPrice: {
@@ -328,16 +327,16 @@ export function transformHandle(handle: string | []): string {
   return collectionName ?? '';
 }
 
-export function transformCart(resCart: Schemas['Cart']): Cart {
+export function transformCart(resCart?: Schemas['Cart']): Cart {
   return {
     checkoutUrl: 'https://frontends-demo.vercel.app',
     cost: {
       subtotalAmount: {
-        amount: resCart.price?.positionPrice?.toString() || '0',
+        amount: resCart?.price?.positionPrice?.toString() || '0',
         currencyCode: 'EUR'
       },
       totalAmount: {
-        amount: resCart.price?.totalPrice?.toString() || '0',
+        amount: resCart?.price?.totalPrice?.toString() || '0',
         currencyCode: 'EUR'
       },
       totalTaxAmount: {
@@ -345,10 +344,10 @@ export function transformCart(resCart: Schemas['Cart']): Cart {
         currencyCode: 'EUR'
       }
     },
-    id: resCart.token ?? '',
+    id: resCart?.token ?? '',
     lines:
-      resCart.lineItems?.map((lineItem: Schemas['LineItem']) => transformLineItem(lineItem)) || [],
-    totalQuantity: resCart.lineItems ? calculateTotalCartQuantity(resCart.lineItems) : 0
+      resCart?.lineItems?.map((lineItem: Schemas['LineItem']) => transformLineItem(lineItem)) || [],
+    totalQuantity: resCart?.lineItems ? calculateTotalCartQuantity(resCart.lineItems) : 0
   };
 }
 
@@ -376,6 +375,7 @@ function transformLineItem(resLineItem: Schemas['LineItem']): CartItem {
       title: resLineItem.label ?? '',
       selectedOptions: [],
       product: {
+        handle: resLineItem.referencedId ?? '',
         description: resLineItem.description ?? '',
         descriptionHtml: resLineItem.description ?? '',
         id: resLineItem.referencedId ?? '',

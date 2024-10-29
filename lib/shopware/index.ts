@@ -1,6 +1,7 @@
 import { isSeoUrls } from 'lib/shopware/helpers';
 import { NextResponse } from 'next/server';
 import {
+  getApiClient,
   requestCategory,
   requestCategoryList,
   requestCategoryProductsCollection,
@@ -33,6 +34,7 @@ import {
 } from './transform';
 
 import { Schemas } from '#shopware';
+import { ApiClientError } from '@shopware/api-client';
 import type { Menu, Page, Product } from './types';
 
 export async function getMenu(params?: {
@@ -105,9 +107,7 @@ export async function getSubCollections(collection: string) {
     }
   }
 
-  // @ts-ignore
   res = await requestCategoryList(criteria);
-  // @ts-ignore
   return res ? transformSubCollection(res, parentCollectionName) : [];
 }
 
@@ -296,4 +296,20 @@ export async function revalidate(): Promise<NextResponse> {
     message: 'This is currently not working and was never tested.',
     now: Date.now()
   });
+}
+
+export async function getCart(cartId?: string): Promise<Schemas['Cart'] | undefined> {
+  try {
+    const apiClient = getApiClient(cartId);
+    const cart = await apiClient.invoke('readCart get /checkout/cart', {});
+
+    return cart.data;
+  } catch (error) {
+    if (error instanceof ApiClientError) {
+      console.error(error);
+      console.error('Details:', error.details);
+    } else {
+      console.error('==>', error);
+    }
+  }
 }

@@ -1,6 +1,8 @@
 'use client';
 
-import type { Cart, CartItem, Product, ProductVariant } from 'lib/shopify/types';
+import { Schemas } from '#shopware';
+import { transformCart } from 'lib/shopware/transform';
+import type { Cart, CartItem, Product, ProductVariant } from 'lib/shopware/types';
 import React, { createContext, use, useContext, useMemo, useOptimistic } from 'react';
 
 type UpdateType = 'plus' | 'minus' | 'delete';
@@ -65,10 +67,7 @@ function createOrUpdateCartItem(
       title: variant.title,
       selectedOptions: variant.selectedOptions,
       product: {
-        id: product.id,
-        handle: product.handle,
-        title: product.title,
-        featuredImage: product.featuredImage
+        ...product
       }
     }
   };
@@ -150,9 +149,9 @@ export function CartProvider({
   cartPromise
 }: {
   children: React.ReactNode;
-  cartPromise: Promise<Cart | undefined>;
+  cartPromise: Promise<Schemas['Cart'] | undefined>;
 }) {
-  const initialCart = use(cartPromise);
+  const initialCart = transformCart(use<Schemas['Cart'] | undefined>(cartPromise));
   const [optimisticCart, updateOptimisticCart] = useOptimistic(initialCart, cartReducer);
 
   const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
@@ -169,6 +168,7 @@ export function CartProvider({
       updateCartItem,
       addCartItem
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [optimisticCart]
   );
 

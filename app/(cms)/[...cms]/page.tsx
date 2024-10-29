@@ -5,7 +5,8 @@ import { getPage } from 'lib/shopware';
 import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }: { params: { cms: string } }): Promise<Metadata> {
-  const page = await getPage(params.cms);
+  const { cms } = await params;
+  const page = await getPage(cms);
 
   if (!page) return notFound();
 
@@ -21,7 +22,8 @@ export async function generateMetadata({ params }: { params: { cms: string } }):
 }
 
 export default async function Page({ params }: { params: { cms: string } }) {
-  const page = await getPage(params.cms);
+  const { cms } = await params;
+  const page = await getPage(cms);
 
   if (!page) return notFound();
   let date = page.createdAt;

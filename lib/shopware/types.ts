@@ -31,7 +31,7 @@ export type Money = {
 };
 
 export type Cart = {
-  id: string;
+  id?: string;
   checkoutUrl: string;
   cost: {
     subtotalAmount: Money;
@@ -43,7 +43,7 @@ export type Cart = {
 };
 
 export type CartItem = {
-  id: string;
+  id: string | undefined;
   quantity: number;
   cost: {
     totalAmount: Money;
@@ -72,6 +72,7 @@ export type Product = {
     minVariantPrice: Money;
   };
   variants: ProductVariant[];
+  handle: string;
   featuredImage: Image;
   images: Image[];
   seo: SEO;

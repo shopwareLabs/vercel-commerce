@@ -35,6 +35,7 @@ export function GridTileImage({
             'max-h-[4rem] min-h-[4rem]': props.width === 200 && props.height === 200 // this styling is for the thumbnails below gallery on product detail page
           })}
           {...props}
+          alt="Image showing the thumbnail of the product"
         />
       ) : null}
       {label ? (

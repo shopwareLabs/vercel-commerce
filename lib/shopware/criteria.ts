@@ -172,7 +172,7 @@ export function getDefaultSubCategoriesCriteria(
   categoryId: string,
   page: number = 1,
   limit: number = 1
-) {
+): Schemas['Criteria'] {
   return {
     page: page,
     limit: limit,

@@ -11,8 +11,9 @@ import { redirect } from 'next/navigation';
 async function fetchCart(cartId?: string): Promise<Schemas['Cart'] | undefined> {
   try {
     const apiClient = getApiClient(cartId);
+    // console.warn('fetching cart with id', cartId);
     const cart = await apiClient.invoke('readCart get /checkout/cart', {});
-
+    //console.warn('fetched cart', cart.data);
     return cart.data;
   } catch (error) {
     if (error instanceof ApiClientError) {
@@ -24,12 +25,13 @@ async function fetchCart(cartId?: string): Promise<Schemas['Cart'] | undefined> 
   }
 }
 
-export async function addItem(prevState: any, selectedVariantId: string | undefined) {
+export async function addItem(prevState: unknown, selectedVariantId: string | undefined) {
   const cart = await getCart();
+  //console.warn('cart', cart, selectedVariantId);
   if (!cart) {
     return 'Could not get cart';
   }
-  const cartId = updateCartCookie(cart);
+  const cartId = await updateCartCookie(cart);
 
   if (!selectedVariantId) {
     return 'Missing product variant ID';
@@ -76,29 +78,29 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
   }
 }
 
-export async function getCart() {
-  const cartId = (await cookies()).get('sw-context-token')?.value;
+export async function getCart(currentCartId?: string): Promise<Schemas['Cart'] | undefined> {
+  const cartId = currentCartId || (await cookies()).get('sw-context-token')?.value;
 
-  if (cartId) {
-    return await fetchCart(cartId);
-  }
-
-  return await fetchCart();
+  const cart = await fetchCart(cartId);
+  return cart;
 }
 
-function updateCartCookie(cart: Schemas['Cart']): string | undefined {
-  const cartId = cookies().get('sw-context-token')?.value;
+async function updateCartCookie(cart: Schemas['Cart']): Promise<string | undefined> {
+  const cartId = (await cookies()).get('sw-context-token')?.value;
+
   // cartId is set, but not valid anymore, update the cookie
-  if (cartId && cart && cart.token && cart.token !== cartId) {
-    cookies().set('sw-context-token', cart.token);
+  if (cart.token && cart.token !== cartId) {
+    (await cookies()).set('sw-context-token', cart.token);
     return cart.token;
+  }
+  return cartId;
 }
 
 function alertErrorMessages(response: Schemas['Cart']): string {
   let errorMessages: string = '';
   if (response.errors) {
     Object.values(response.errors as Schemas['CartError']).forEach(function (value) {
-      const messageKey: any = value.messageKey;
+      const messageKey: string | undefined = value.messageKey;
       if (value.message && messageKey) {
         errorMessages += value.message;
       }
@@ -109,19 +111,20 @@ function alertErrorMessages(response: Schemas['Cart']): string {
 }
 
 export async function updateItemQuantity(
-  prevState: any,
+  prevState: unknown,
   payload: {
-    merchandiseId: string;
+    lineId: string | undefined;
+    variantId: string | undefined;
     quantity: number;
   }
 ) {
-  const cartId = cookies().get('sw-context-token')?.value;
+  const cartId = (await cookies()).get('sw-context-token')?.value;
 
   if (!cartId) {
     return 'Missing cart ID';
   }
 
-  const { merchandiseId, quantity } = payload;
+  const { lineId, variantId, quantity } = payload;
 
   try {
     if (quantity === 0) {
@@ -130,6 +133,7 @@ export async function updateItemQuantity(
       return;
     }
 
+    //console.warn('update cart item', lineId, variantId, quantity);
     await updateLineItem(lineId, variantId, quantity);
     revalidateTag(TAGS.cart);
   } catch (error) {
@@ -142,11 +146,15 @@ export async function updateItemQuantity(
   }
 }
 
-export async function removeItem(prevState: any, lineId: string) {
-  const cartId = cookies().get('sw-context-token')?.value;
+export async function removeItem(prevState: unknown, lineId?: string) {
+  const cartId = (await cookies()).get('sw-context-token')?.value;
 
   if (!cartId) {
     return 'Missing cart ID';
+  }
+
+  if (!lineId) {
+    return 'Missing line ID';
   }
 
   try {
@@ -167,11 +175,19 @@ export async function removeItem(prevState: any, lineId: string) {
   }
 }
 
-async function updateLineItem(lineId: string, variantId: string, quantity: number) {
-  const cartId = cookies().get('sw-context-token')?.value;
+async function updateLineItem(
+  lineId: string | undefined,
+  variantId: string | undefined,
+  quantity: number
+) {
+  const cartId = (await cookies()).get('sw-context-token')?.value;
 
   if (!cartId) {
     return { message: 'Missing cart ID' } as Error;
+  }
+
+  if (!lineId || !variantId) {
+    return { message: 'Missing line ID or variant ID' } as Error;
   }
 
   try {
@@ -198,23 +214,24 @@ async function updateLineItem(lineId: string, variantId: string, quantity: numbe
 }
 
 export async function redirectToCheckout() {
-  let cartId = (await cookies()).get('cartId')?.value;
+  const cartId = (await cookies()).get('cartId')?.value;
 
   if (!cartId) {
     return 'Missing cart ID';
   }
 
-  let cart = await getCart(cartId);
+  const cart = await getCart(cartId);
 
   if (!cart) {
     return 'Error fetching cart';
   }
-
+  // @ts-expect-error checkoutUrl may not exist
   redirect(cart.checkoutUrl);
-
 }
 
 export async function createCartAndSetCookie() {
-  let cart = await getCart();
-  cookies().set('cartId', cart?.token!);
+  const cart = await getCart();
+  if (cart?.token) {
+    (await cookies()).set('sw-context-token', cart?.token);
+  }
 }

@@ -1,3 +1,5 @@
+import Cart from 'components/cart';
+import OpenCart from 'components/cart/open-cart';
 import LogoSquare from 'components/logo-square';
 import { getMenu } from 'lib/shopware';
 import { Menu } from 'lib/shopware/types';
