@@ -67,6 +67,7 @@ export function VariantSelector({
                   const newState = updateOption(optionNameLowerCase, value);
                   updateURL(newState);
                 }}
+                role="button"
                 key={value}
                 aria-disabled={!isAvailableForSale}
                 disabled={!isAvailableForSale}

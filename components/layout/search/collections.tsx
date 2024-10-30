@@ -5,7 +5,7 @@ import { getSubCollections } from 'lib/shopware';
 import { transformCollectionToList } from 'lib/shopware/transform';
 import FilterList from './filter';
 
-async function CollectionList(params: Promise<{ collection: string }>) {
+async function CollectionList(params: { collection: string }) {
   const { collection: collectionName } = await params;
   if (!collectionName) return;
 
@@ -20,7 +20,7 @@ const skeleton = 'mb-3 h-4 w-5/6 animate-pulse rounded';
 const activeAndTitles = 'bg-neutral-800 dark:bg-neutral-300';
 const items = 'bg-neutral-400 dark:bg-neutral-700';
 
-export default async function Collections(params: Promise<{ collection: string }>) {
+export default async function Collections(params: { collection: string }) {
   const { collection } = await params;
   return (
     <Suspense

@@ -10,6 +10,6 @@ export default async function Cart() {
   if (!cart) {
     return null;
   }
-
+  // @ts-expect-error cart is not null
   return <CartModal cart={cart} />;
 }

@@ -5,6 +5,7 @@ import LoadingDots from 'components/loading-dots';
 import { CartItem } from 'lib/shopware/types';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
+import { UpdateType } from './cart-context';
 
 function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
   const { pending } = useFormStatus();
@@ -36,7 +37,15 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
   );
 }
 
-export function EditItemQuantityButton({ item, type }: { item: CartItem; type: 'plus' | 'minus' }) {
+type EditItemQuantityButtonProps = {
+  item: CartItem;
+
+  type: 'plus' | 'minus';
+
+  optimisticUpdate: (merchandiseId: string, updateType: UpdateType) => void;
+};
+
+export function EditItemQuantityButton({ item, type }: EditItemQuantityButtonProps) {
   const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
     lineId: item.id,

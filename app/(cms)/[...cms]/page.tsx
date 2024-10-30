@@ -4,7 +4,11 @@ import Prose from 'components/prose';
 import { getPage } from 'lib/shopware';
 import { notFound } from 'next/navigation';
 
-export async function generateMetadata({ params }: { params: { cms: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ cms: string }>;
+}): Promise<Metadata> {
   const { cms } = await params;
   const page = await getPage(cms);
 
@@ -21,7 +25,7 @@ export async function generateMetadata({ params }: { params: { cms: string } }):
   };
 }
 
-export default async function Page({ params }: { params: { cms: string } }) {
+export default async function Page({ params }: { params: Promise<{ cms: string }> }) {
   const { cms } = await params;
   const page = await getPage(cms);
 

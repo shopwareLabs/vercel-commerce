@@ -96,7 +96,8 @@ export async function getFirstProduct(productId: string): Promise<Schemas['Produ
 export async function getSubCollections(collection: string) {
   const collectionName = decodeURIComponent(transformHandle(collection ?? ''));
   let criteria = getDefaultSubCategoriesCriteria(collectionName);
-  let res = undefined;
+  let res: (Schemas['EntitySearchResult'] & { elements: Schemas['Category'][] }) | undefined;
+
   const parentCollectionName =
     Array.isArray(collection) && collection[0] ? collection[0] : undefined;
 
@@ -107,7 +108,11 @@ export async function getSubCollections(collection: string) {
     }
   }
 
-  res = await requestCategoryList(criteria);
+  const categoryList = await requestCategoryList(criteria);
+  if (!categoryList) {
+    return;
+  }
+
   return res ? transformSubCollection(res, parentCollectionName) : [];
 }
 
@@ -126,6 +131,11 @@ export async function getSearchCollectionProducts(params?: {
   const search = await requestSearchCollectionProducts(searchCriteria);
   if (isSeoUrls() && search) {
     search.elements = await changeVariantUrlToParentUrl(search);
+  }
+
+  // Ensure elements is always an array
+  if (search && !search.elements) {
+    search.elements = [];
   }
 
   return search ? transformProducts(search) : [];

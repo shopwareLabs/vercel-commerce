@@ -14,7 +14,7 @@ import { transformHandle } from 'lib/shopware/transform';
 export async function generateMetadata({
   params
 }: {
-  params: { collection: string };
+  params: Promise<{ collection: string }>;
 }): Promise<Metadata> {
   const { collection: collectionParamName } = await params;
 
@@ -39,8 +39,8 @@ export default async function CategoryPage({
   params,
   searchParams
 }: {
-  params: { collection: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
+  params: Promise<{ collection: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { collection } = await params;
   const { sort, page } = (await searchParams) as { [key: string]: string };

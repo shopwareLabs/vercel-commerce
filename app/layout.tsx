@@ -1,12 +1,10 @@
 import { getCart } from 'components/cart/actions';
 import { CartProvider } from 'components/cart/cart-context';
 import Navbar from 'components/layout/navbar';
-import { WelcomeToast } from 'components/welcome-toast';
 import { GeistSans } from 'geist/font/sans';
 import { ensureStartsWith } from 'lib/utils';
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
-import { Toaster } from 'sonner';
 import './globals.css';
 
 const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
@@ -48,8 +46,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <Navbar />
           <main>
             {children}
-            <Toaster closeButton />
-            <WelcomeToast />
+            {/* <Toaster closeButton />
+            <WelcomeToast /> */}
           </main>
         </CartProvider>
       </body>

@@ -5,7 +5,7 @@ import { transformCart } from 'lib/shopware/transform';
 import type { Cart, CartItem, Product, ProductVariant } from 'lib/shopware/types';
 import React, { createContext, use, useContext, useMemo, useOptimistic } from 'react';
 
-type UpdateType = 'plus' | 'minus' | 'delete';
+export type UpdateType = 'plus' | 'minus' | 'delete';
 
 type CartAction =
   | { type: 'UPDATE_ITEM'; payload: { merchandiseId: string; updateType: UpdateType } }
