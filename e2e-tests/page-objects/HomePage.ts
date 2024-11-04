@@ -15,9 +15,7 @@ export class HomePage extends AbstractPage {
   }
 
   async openProductPage() {
-    this.page
-      .getByRole('link', { name: 'LIGHT CLOTH TAUPE BRIGHT LIGHT CLOTH TAUPE BRIGHT €139.00EUR' })
-      .click();
+    this.page.getByRole('link', { name: 'LIGHT CLOTH TAUPE BRIGHT' }).click();
   }
 
   async openVariantsCartPage() {
