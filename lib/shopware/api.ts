@@ -161,7 +161,6 @@ export async function requestSearchCollectionProducts(
 }
 
 export async function requestSeoUrls(routeName: RouteNames, page: number = 1, limit: number = 100) {
-  console.warn('requestSeoUrls', routeName, page, limit);
   try {
     const response = await getApiClient().invoke('readSeoUrl post /seo-url', {
       body: {

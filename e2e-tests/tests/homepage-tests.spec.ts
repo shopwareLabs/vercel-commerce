@@ -16,7 +16,7 @@ test.describe.only('CMS links', () => {
     await homePage.goToCmsPages();
     await page.waitForLoadState('domcontentloaded');
     await expect(page).toHaveTitle(
-      'Defective Product | Next.js Shopware Starter with Composable Frontends'
+      'Defective Product | Next.js Commerce with Shopware Composable Frontends'
     );
   });
 

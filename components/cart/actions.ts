@@ -11,9 +11,7 @@ import { redirect } from 'next/navigation';
 async function fetchCart(cartId?: string): Promise<Schemas['Cart'] | undefined> {
   try {
     const apiClient = getApiClient(cartId);
-    // console.warn('fetching cart with id', cartId);
     const cart = await apiClient.invoke('readCart get /checkout/cart', {});
-    //console.warn('fetched cart', cart.data);
     return cart.data;
   } catch (error) {
     if (error instanceof ApiClientError) {
@@ -27,7 +25,6 @@ async function fetchCart(cartId?: string): Promise<Schemas['Cart'] | undefined> 
 
 export async function addItem(prevState: unknown, selectedVariantId: string | undefined) {
   const cart = await getCart();
-  //console.warn('cart', cart, selectedVariantId);
   if (!cart) {
     return 'Could not get cart';
   }
@@ -133,7 +130,6 @@ export async function updateItemQuantity(
       return;
     }
 
-    //console.warn('update cart item', lineId, variantId, quantity);
     await updateLineItem(lineId, variantId, quantity);
     revalidateTag(TAGS.cart);
   } catch (error) {
