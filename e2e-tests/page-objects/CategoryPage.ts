@@ -10,12 +10,10 @@ export class CategoryPage {
   async changePage() {
     await this.page.waitForLoadState('load');
     await this.page.getByLabel('Next page').click();
-    await this.page.waitForLoadState('networkidle');
   }
 
   async checkCategoryFilter() {
     await this.page.waitForLoadState('load');
     await this.page.getByRole('link', { name: 'Price: High to low' }).first().click();
-    await this.page.waitForLoadState('networkidle');
   }
 }
