@@ -98,6 +98,7 @@ export function transformCollection(
     handle: seoUrlElement?.seoPathInfo ?? resCategory.id ?? '',
     title: resCategory.translated?.metaTitle ?? resCategory.name ?? '',
     description: resCategory.description ?? '',
+    featuredImage: resCategory?.media?.url ?? '',
     seo: {
       title: resCategory.translated?.metaTitle ?? resCategory.name ?? '',
       description: resCategory.translated?.metaDescription ?? resCategory.description ?? ''

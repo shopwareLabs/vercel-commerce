@@ -86,6 +86,7 @@ export function getDefaultCategoryCriteria(
     page: page,
     limit: limit,
     associations: {
+      media: {},
       cmsPage: {}
     }
   };
@@ -96,6 +97,7 @@ export function getDefaultCategoryWithCmsCriteria(page: number = 1, limit: numbe
     page: page,
     limit: limit,
     associations: {
+      media: {},
       cmsPage: {
         associations: {
           sections: {
