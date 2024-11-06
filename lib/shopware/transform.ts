@@ -111,7 +111,7 @@ export function transformCollection(
 }
 
 export function transformSubCollection(
-  category?: (Schemas['EntitySearchResult'] & { elements: Schemas['Category'][] }) | undefined,
+  category?: (Schemas['EntitySearchResult'] & { elements?: Schemas['Category'][] }) | undefined,
   parentCollectionName?: string
 ): Collection[] {
   const collection: Collection[] = [];
