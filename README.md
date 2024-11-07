@@ -1,6 +1,6 @@
 # Next.js Shopware Starter
 
-A Next.js 14 and App Router-ready ecommerce template featuring:
+A high-performance, server-rendered Next.js App Router ecommerce application.
 
 - Next.js App Router
 - Optimized for SEO using Next.js's Metadata
@@ -17,6 +17,9 @@ A Next.js 14 and App Router-ready ecommerce template featuring:
 Next.js Shopware Starter requires a running [Shopware 6 Instance (Installation Guide)](https://developer.shopware.com/docs/guides/installation).
 
 To get started, use this README and the example environment variable comments.
+
+- [React Bricks](https://github.com/ReactBricks/nextjs-commerce-rb) ([Demo](https://nextjs-commerce.reactbricks.com/))
+  - Edit pages, product details, and footer content visually using [React Bricks](https://www.reactbricks.com) visual headless CMS.
 
 ## Running locally
 

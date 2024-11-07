@@ -3,7 +3,9 @@ import clsx from 'clsx';
 import { updateItemQuantity } from 'components/cart/actions';
 import LoadingDots from 'components/loading-dots';
 import { CartItem } from 'lib/shopware/types';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
+import { UpdateType } from './cart-context';
 
 function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
   const { pending } = useFormStatus();
@@ -35,8 +37,16 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
   );
 }
 
-export function EditItemQuantityButton({ item, type }: { item: CartItem; type: 'plus' | 'minus' }) {
-  const [message, formAction] = useFormState(updateItemQuantity, null);
+type EditItemQuantityButtonProps = {
+  item: CartItem;
+
+  type: 'plus' | 'minus';
+
+  optimisticUpdate: (merchandiseId: string, updateType: UpdateType) => void;
+};
+
+export function EditItemQuantityButton({ item, type }: EditItemQuantityButtonProps) {
+  const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
     lineId: item.id,
     variantId: item.id,
@@ -48,7 +58,7 @@ export function EditItemQuantityButton({ item, type }: { item: CartItem; type: '
     <form action={actionWithVariant}>
       <SubmitButton type={type} />
       <p aria-live="polite" className="sr-only" role="status">
-        {message}
+        {message || ''}
       </p>
     </form>
   );

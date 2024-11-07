@@ -15,14 +15,14 @@ test.describe.only('Category pagination', () => {
   });
 
   test('Category pagination verification', async ({ page }) => {
-    await homePage.visitMainPage();
+    // await homePage.visitMainPage();
     await homePage.openCateoryPage();
     await categoryPage.changePage();
     await expect(page).toHaveURL('/search/Products?page=2');
   });
 
   test('Category filters verification', async ({ page }) => {
-    await homePage.visitMainPage();
+    //  await homePage.visitMainPage();
     await homePage.openCateoryPage();
     await categoryPage.checkCategoryFilter();
     await expect(page).toHaveURL('/search/Products?sort=price-desc');

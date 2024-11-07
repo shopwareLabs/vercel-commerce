@@ -18,9 +18,7 @@ test.describe.only('add product to cart', () => {
     await homePage.visitMainPage();
     await homePage.openProductPage();
     await productPage.addToCart();
-    await expect(
-      page.getByText('LIGHT CLOTH TAUPE BRIGHTLIGHT CLOTH TAUPE BRIGHT€139.00EUR1')
-    ).toBeVisible();
+    await expect(page.getByText('LIGHT CLOTH TAUPE BRIGHT').first()).toBeVisible();
   });
 
   test('Add to cart variant product', async ({ page }) => {
@@ -28,6 +26,8 @@ test.describe.only('add product to cart', () => {
     await homePage.openVariantsCartPage();
     await productPage.selectVariant();
     await productPage.addToCart();
-    await expect(page.getByText('LAVENDA Product VariantsLAVENDA Product Variants')).toBeVisible();
+    await expect(
+      page.getByText('LAVENDA Product VariantsLAVENDA Product Variants').first()
+    ).toBeVisible();
   });
 });

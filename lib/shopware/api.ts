@@ -70,10 +70,9 @@ export async function requestCategory(
 }
 
 export async function requestCategoryList(criteria: Schemas['Criteria']): Promise<
-  | ({
-      elements?: Schemas['Category'][];
-    } & Schemas['EntitySearchResult'])
-  | undefined
+  {
+    elements?: Schemas['Category'][];
+  } & Schemas['EntitySearchResult']
 > {
   try {
     const response = await getApiClient().invoke('readCategoryList post /category', {
@@ -87,6 +86,7 @@ export async function requestCategoryList(criteria: Schemas['Criteria']): Promis
     } else {
       console.error('==>', error);
     }
+    return { elements: [] };
   }
 }
 

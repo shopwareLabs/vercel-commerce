@@ -14,6 +14,6 @@ export class CategoryPage {
 
   async checkCategoryFilter() {
     await this.page.waitForLoadState('load');
-    await this.page.getByRole('link', { name: 'Price: High to low' }).click();
+    await this.page.getByRole('link', { name: 'Price: High to low' }).first().click();
   }
 }
