@@ -50,8 +50,19 @@ function createOrUpdateCartItem(
   variant: ProductVariant,
   product: Product
 ): CartItem {
+  const productPrice = variant.price?.amount
+    ? variant.price.amount
+    : product.priceRange.minVariantPrice.amount === product.priceRange.maxVariantPrice.amount
+      ? product.priceRange.minVariantPrice.amount
+      : '0';
   const quantity = existingItem ? existingItem.quantity + 1 : 1;
-  const totalAmount = calculateItemCost(quantity, variant.price.amount);
+  const totalAmount = calculateItemCost(quantity, productPrice);
+  const currencyCode = variant.price?.currencyCode
+    ? variant.price?.currencyCode
+    : product.priceRange.minVariantPrice.currencyCode ===
+        product.priceRange.maxVariantPrice.currencyCode
+      ? product.priceRange.minVariantPrice.currencyCode
+      : 'EUR';
 
   return {
     id: existingItem?.id,
@@ -59,7 +70,7 @@ function createOrUpdateCartItem(
     cost: {
       totalAmount: {
         amount: totalAmount,
-        currencyCode: variant.price.currencyCode
+        currencyCode: currencyCode
       }
     },
     merchandise: {

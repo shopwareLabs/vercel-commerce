@@ -93,13 +93,16 @@ export default function CartModal() {
                         a.merchandise.product.title.localeCompare(b.merchandise.product.title)
                       )
                       ?.map((item, i) => {
+                        console.log('Item', item.merchandise.selectedOptions);
                         const merchandiseSearchParams = {} as MerchandiseSearchParams;
 
-                        item.merchandise.selectedOptions.forEach(({ name, value }) => {
-                          if (value !== DEFAULT_OPTION) {
-                            merchandiseSearchParams[name.toLowerCase()] = value;
-                          }
-                        });
+                        if (item.merchandise.selectedOptions) {
+                          item.merchandise.selectedOptions.forEach(({ name, value }) => {
+                            if (value !== DEFAULT_OPTION) {
+                              merchandiseSearchParams[name.toLowerCase()] = value;
+                            }
+                          });
+                        }
 
                         const merchandiseUrl = createUrl(
                           `/product/${item.merchandise.product.path}`,
@@ -137,7 +140,8 @@ export default function CartModal() {
                                     <span className="leading-tight">
                                       {item.merchandise.product.title}
                                     </span>
-                                    {item.merchandise.title !== DEFAULT_OPTION ? (
+                                    {item.merchandise.title !==
+                                    item.merchandise.product.seo.title ? (
                                       <p className="text-sm text-neutral-500 dark:text-neutral-400">
                                         {item.merchandise.title}
                                       </p>
@@ -155,7 +159,7 @@ export default function CartModal() {
                                   <EditItemQuantityButton
                                     item={item}
                                     type="minus"
-                                    optimisticUpdate={updateCartItem}
+                                    optimisticUpdate={(item.id, updateCartItem)}
                                   />
                                   <p className="w-6 text-center">
                                     <span className="w-full text-sm">{item.quantity}</span>

@@ -18,9 +18,6 @@ Next.js Shopware Starter requires a running [Shopware 6 Instance (Installation G
 
 To get started, use this README and the example environment variable comments.
 
-- [React Bricks](https://github.com/ReactBricks/nextjs-commerce-rb) ([Demo](https://nextjs-commerce.reactbricks.com/))
-  - Edit pages, product details, and footer content visually using [React Bricks](https://www.reactbricks.com) visual headless CMS.
-
 ## Running locally
 
 You will need to use the environment variables [defined in `.env.example`](https://github.com/shopwareLabs/nextjs-shopware-starter/blob/main/.env.example) to run Next.js Shopware Starter. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for this, but a `.env` file is all that is necessary.

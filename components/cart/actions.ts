@@ -146,11 +146,11 @@ export async function removeItem(prevState: unknown, lineId?: string) {
   const cartId = (await cookies()).get('sw-context-token')?.value;
 
   if (!cartId) {
-    return 'Missing cart ID';
+    return 'Cart ID is missing';
   }
 
   if (!lineId) {
-    return 'Missing line ID';
+    return 'Line ID is missing';
   }
 
   try {

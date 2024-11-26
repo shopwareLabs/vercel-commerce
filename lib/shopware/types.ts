@@ -72,6 +72,9 @@ export type Product = {
     minVariantPrice: Money;
   };
   variants: ProductVariant[];
+  merchandise: {
+    selectedOptions: [];
+  };
   handle: string;
   featuredImage: Image;
   images: Image[];

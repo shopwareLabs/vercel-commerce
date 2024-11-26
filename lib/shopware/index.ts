@@ -268,6 +268,7 @@ export async function getProduct(handle: string | []): Promise<Product | undefin
   const productHandle = decodeURIComponent(transformHandle(handle));
   productId = productHandle; // if we do not use seoUrls the handle should be the product id
 
+  console.log('productHandle', productHandle, isSeoUrls());
   if (isSeoUrls()) {
     const seoUrlElement = await getFirstSeoUrlElement(productHandle);
     if (seoUrlElement) {

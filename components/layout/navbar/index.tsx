@@ -1,5 +1,4 @@
-import Cart from 'components/cart';
-import OpenCart from 'components/cart/open-cart';
+import CartModal from 'components/cart/modal';
 import LogoSquare from 'components/logo-square';
 import { getMenu } from 'lib/shopware';
 import { Menu } from 'lib/shopware/types';
@@ -45,9 +44,7 @@ export default async function Navbar() {
           </Suspense>
         </div>
         <div className="flex justify-end md:w-1/6">
-          <Suspense fallback={<OpenCart />}>
-            <Cart />
-          </Suspense>
+          <CartModal />
         </div>
       </div>
     </nav>
