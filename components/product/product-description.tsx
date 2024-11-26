@@ -22,11 +22,7 @@ export function ProductDescription({ product }: { product: Product }) {
       </Suspense>
 
       <Suspense fallback={null}>
-        <AddToCart
-          product={product}
-          variants={product.variants}
-          availableForSale={product.availableForSale}
-        />
+        <AddToCart product={product} />
       </Suspense>
 
       {product.descriptionHtml ? (

@@ -39,9 +39,7 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
 
 type EditItemQuantityButtonProps = {
   item: CartItem;
-
   type: 'plus' | 'minus';
-
   optimisticUpdate: (merchandiseId: string, updateType: UpdateType) => void;
 };
 

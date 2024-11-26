@@ -228,6 +228,9 @@ export function transformProduct(item: Schemas['Product']): Product {
       }
     },
     variants: productVariants,
+    merchandise: {
+      selectedOptions: []
+    },
     featuredImage: {
       url: item.cover?.media?.url ?? '',
       altText: item.cover?.media?.translated?.alt ?? '',
@@ -395,6 +398,9 @@ function transformLineItem(resLineItem: Schemas['LineItem']): CartItem {
         },
         options: [],
         variants: [],
+        merchandise: {
+          selectedOptions: []
+        },
         priceRange: {
           minVariantPrice: {
             amount: '', // @ToDo: should be correct value
